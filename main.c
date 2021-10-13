@@ -3,5 +3,5 @@
 #include <math.h>
 
 int main(void) {
-int i;
+
 }
