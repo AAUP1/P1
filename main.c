@@ -12,7 +12,7 @@ int main(void) {
 }
 
 int is_cool(int number) {
-    if(number == 69 || number == 420 || number == 42 || number == 21) {
+    if(number == 69 || number == 420 || number == 42 || number == 21 || number == 1337) {
         printf("nice");
         return 1;
     } else{
