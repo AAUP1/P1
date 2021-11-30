@@ -2,12 +2,17 @@
 #include <stdlib.h>
 #include <math.h>
 #include <conio.h>
-
+#include <string.h>
+// wchar needed for wprint too show different symbols.
+#include <wchar.h>
 #define SPECIAL_CHAR_INDICATOR 224
+void line(char);
+void box();
 
 void tick_for_state(int state, int input);
 void tick_menu(int input);
 void tick_overview(int input);
+
 
 int read_character();
 int map_non_ascii_char(char character);
@@ -20,7 +25,12 @@ enum state {MENU, OVERVIEW, EDIT, SEARCH};
 enum state current_state = MENU;
 int program_is_running = 1;
 
-int main(void) {
+
+int main(void) {  
+    
+    line('-');
+    box();
+    
     int character_pressed = '\0';
     while(program_is_running) {
         if(kbhit()) {
@@ -32,6 +42,36 @@ int main(void) {
         }
     }
     return EXIT_SUCCESS;
+}
+//line function that will draw a 117 character long line
+void line(char c){
+    for(int i = 0; i < 117; i++){
+        wprintf(L"%c", c);
+    }
+    printf("\n");
+}
+
+// makes a menu button with text inside
+void box(){
+    char strL2[20] = "derp";
+    //takes the lengh of the input and uses it    
+    int strL = strlen(strL2);
+    printf("/");
+    for(int i = 0; i < strL + 2; i++){
+        printf("-");
+    }
+    printf("\\\n| ");
+    for(int i = 0; i < strL; i++){
+        printf("%c", strL2[i]);
+    }
+    
+    printf(" |\n");
+
+    printf("\\");
+    for(int i = 0; i < strL + 2; i++){
+        printf("-");
+    }
+    printf("/");
 }
 
 void tick_for_state(int state, int input) {
