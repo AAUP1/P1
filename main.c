@@ -7,7 +7,7 @@
 #include <wchar.h>
 #define SPECIAL_CHAR_INDICATOR 224
 void line(char);
-void box();
+void box(char*);
 
 void tick_for_state(int state, int input);
 void tick_menu(int input);
@@ -27,9 +27,8 @@ int program_is_running = 1;
 
 
 int main(void) {  
-    
     line('-');
-    box();
+    box("HERPY DERP");
     
     int character_pressed = '\0';
     while(program_is_running) {
@@ -52,17 +51,19 @@ void line(char c){
 }
 
 // makes a menu button with text inside
-void box(){
-    char strL2[20] = "derp";
+void box(char* str){
     //takes the lengh of the input and uses it    
-    int strL = strlen(strL2);
+    int strL = strlen(str);
+    //Box top
     printf("/");
     for(int i = 0; i < strL + 2; i++){
         printf("-");
     }
     printf("\\\n| ");
+    
+    //prints the text in the box
     for(int i = 0; i < strL; i++){
-        printf("%c", strL2[i]);
+        printf("%c", str[i]);
     }
     
     printf(" |\n");
