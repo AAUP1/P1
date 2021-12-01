@@ -46,8 +46,6 @@ int program_is_running = 1;
 
 int main(void) {  
 
-    printf("ÆKLDFJÆSLKDFJÆSDKL");
-
     int character_pressed = '\0';
     while(program_is_running) {
         if(kbhit()) {
