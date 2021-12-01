@@ -2,12 +2,19 @@
 #include <stdlib.h>
 #include <math.h>
 #include <conio.h>
+//used for strings.
 #include <string.h>
+
 // wchar needed for wprint too show different symbols.
 #include <wchar.h>
+
+//used for clearing the screen!
+#include <unistd.h>
 #define SPECIAL_CHAR_INDICATOR 224
 void line(char);
-void box(char*);
+void box(char*, int);
+void updateOnPress(int);
+void clearScreen();
 
 void tick_for_state(int state, int input);
 void tick_menu(int input);
@@ -25,10 +32,11 @@ enum state {MENU, OVERVIEW, EDIT, SEARCH};
 enum state current_state = MENU;
 int program_is_running = 1;
 
+//value so I can reach it elsewhere!
+    int testvalue = 0;
+
 
 int main(void) {  
-    line('-');
-    box("HERPY DERP");
     
     int character_pressed = '\0';
     while(program_is_running) {
@@ -38,11 +46,18 @@ int main(void) {
             printf("\n Key pressed = %c, with index of %i", character_pressed, character_pressed);
             /* Sends signal to the right state */
             tick_for_state(current_state, character_pressed);
+            
+            //function that can test and use charater_pressed!
+            updateOnPress(character_pressed);
+
         }
     }
+    
+
+
     return EXIT_SUCCESS;
 }
-//line function that will draw a 117 character long line
+//draws 117 charaters: line('charater');
 void line(char c){
     for(int i = 0; i < 117; i++){
         wprintf(L"%c", c);
@@ -50,14 +65,18 @@ void line(char c){
     printf("\n");
 }
 
-// makes a menu button with text inside
-void box(char* str){
+// makes a menu button: box("text in center", 1/0);
+void box(char* str, int isactive){
     //takes the lengh of the input and uses it    
     int strL = strlen(str);
     //Box top
     printf("/");
     for(int i = 0; i < strL + 2; i++){
-        printf("-");
+        if(isactive){
+            printf("=");
+        } else{
+            printf("-");
+        }        
     }
     printf("\\\n| ");
     
@@ -67,13 +86,40 @@ void box(char* str){
     }
     
     printf(" |\n");
-
+    //box bottom
     printf("\\");
     for(int i = 0; i < strL + 2; i++){
-        printf("-");
+        if(isactive){
+            printf("=");
+        } else{
+            printf("-");
+        }
     }
-    printf("/");
+    printf("/\n");
 }
+
+//testing function that takes charater input
+void updateOnPress(int character_pressed){
+    clearScreen();
+    line('-');
+    //TESTING IF BOX CAN BE ACTIVE
+            if(character_pressed == 77){
+                testvalue = 1;
+            } else if(character_pressed == 75){
+                testvalue = 0;
+            }
+            printf("\n");
+            box("testbox", testvalue);
+    //END OF TESTING ACTIVE BOX
+    
+}
+
+//clears the screen function
+void clearScreen(){
+  const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+}
+
 
 void tick_for_state(int state, int input) {
     switch(state) {
