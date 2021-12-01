@@ -14,7 +14,8 @@
 //used for placing cursor in console
 #include <windows.h>
 
-#define SPECIAL_CHAR_INDICATOR 224
+#define SPECIAL_CHAR_INDICATOR_1 224
+#define SPECIAL_CHAR_INDICATOR_2 0
 void line(char);
 void box(char*, int, int, int);
 void updateOnPress(int);
@@ -44,7 +45,9 @@ int program_is_running = 1;
 
 
 int main(void) {  
-    
+
+    printf("ÆKLDFJÆSLKDFJÆSDKL");
+
     int character_pressed = '\0';
     while(program_is_running) {
         if(kbhit()) {
@@ -182,7 +185,7 @@ void tick_overview(int input) {
 
 int read_character() {
     int read_char =_getch();
-    if(read_char == SPECIAL_CHAR_INDICATOR) {
+    if(read_char == SPECIAL_CHAR_INDICATOR_1 || read_char == SPECIAL_CHAR_INDICATOR_2) {
         read_char = _getch();
         read_char = map_non_ascii_char(read_char);
     }
