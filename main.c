@@ -196,7 +196,8 @@ void redrawState(int state) {
             drawEditView(&editView);
             break;
         case SEARCH:
-            drawEditView(&editView); /* DIS IS NOT SEARCH!!! */
+            drawEditView(&editView); /* DIS IS NOT SEARCH!!!
+                                        no shit sherlock it points to editView :) - Bjørn*/
     }
 }
 
