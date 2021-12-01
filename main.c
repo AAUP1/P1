@@ -10,11 +10,17 @@
 
 //used for clearing the screen!
 #include <unistd.h>
+
+//used for placing cursor in console
+#include <windows.h>
+
 #define SPECIAL_CHAR_INDICATOR 224
 void line(char);
 void box(char*, int);
 void updateOnPress(int);
-void clearScreen();
+void clear();
+void ConsolePlacement(int, int);
+
 
 void tick_for_state(int state, int input);
 void tick_menu(int input);
@@ -25,8 +31,9 @@ int read_character();
 int map_non_ascii_char(char character);
 
 enum keyname {
+        //delete has been renamed "DELETE2" because its a preset from <windows.h>
         UP = 328, DOWN = 336, LEFT = 331, RIGHT = 333,
-        PAGE_UP = 329, PAGE_DOWN = 337, DELETE = 339};
+        PAGE_UP = 329, PAGE_DOWN = 337, DELETE2 = 339};
 
 enum state {MENU, OVERVIEW, EDIT, SEARCH};
 enum state current_state = MENU;
@@ -100,7 +107,8 @@ void box(char* str, int isactive){
 
 //testing function that takes charater input
 void updateOnPress(int character_pressed){
-    clearScreen();
+    clear();
+    ConsolePlacement(10, 10);
     line('-');
     //TESTING IF BOX CAN BE ACTIVE
             if(character_pressed == 77){
@@ -114,12 +122,26 @@ void updateOnPress(int character_pressed){
     
 }
 
-//clears the screen function
-void clearScreen(){
-  const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
-}
 
+/* clear function to clear console on all OS
+clear will move cursor back to (0,0) in console*/
+void clear(){
+    #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+        system("clear");
+    #endif
+
+    #if defined(_WIN32) || defined(_WIN64)
+        system("cls");
+    #endif
+}
+void ConsolePlacement(int x, int y){
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos = {x, y};
+    SetConsoleCursorPosition(hConsole, pos);
+    //WriteConsole(hConsole, "Hello", 5, NULL, NULL);
+    //printf("SKUBIDUBIDUBA");
+    //return 0;
+}
 
 void tick_for_state(int state, int input) {
     switch(state) {
