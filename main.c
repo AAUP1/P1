@@ -16,7 +16,7 @@
 
 #define SPECIAL_CHAR_INDICATOR 224
 void line(char);
-void box(char*, int);
+void box(char*, int, int, int);
 void updateOnPress(int);
 void clear();
 void ConsolePlacement(int, int);
@@ -73,10 +73,11 @@ void line(char c){
 }
 
 // makes a menu button: box("text in center", 1/0);
-void box(char* str, int isactive){
+void box(char* str, int isactive, int x, int y){
     //takes the lengh of the input and uses it    
     int strL = strlen(str);
     //Box top
+    ConsolePlacement(x, y);
     printf("/");
     for(int i = 0; i < strL + 2; i++){
         if(isactive){
@@ -85,7 +86,11 @@ void box(char* str, int isactive){
             printf("-");
         }        
     }
-    printf("\\\n| ");
+    printf("\\");
+    printf("\n");
+    ConsolePlacement(x, y + 1);
+    printf("| ");
+    
     
     //prints the text in the box
     for(int i = 0; i < strL; i++){
@@ -93,6 +98,7 @@ void box(char* str, int isactive){
     }
     
     printf(" |\n");
+    ConsolePlacement(x, y + 2);
     //box bottom
     printf("\\");
     for(int i = 0; i < strL + 2; i++){
@@ -108,16 +114,16 @@ void box(char* str, int isactive){
 //testing function that takes charater input
 void updateOnPress(int character_pressed){
     clear();
-    ConsolePlacement(10, 10);
+    //ConsolePlacement(10, 10);
     line('-');
     //TESTING IF BOX CAN BE ACTIVE
-            if(character_pressed == 77){
+            if(character_pressed == 77 || character_pressed == 333){
                 testvalue = 1;
-            } else if(character_pressed == 75){
+            } else if(character_pressed == 75 || character_pressed == 331){
                 testvalue = 0;
             }
             printf("\n");
-            box("testbox", testvalue);
+            box("testbox", testvalue, 10, 10);
     //END OF TESTING ACTIVE BOX
     
 }
@@ -138,9 +144,6 @@ void ConsolePlacement(int x, int y){
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD pos = {x, y};
     SetConsoleCursorPosition(hConsole, pos);
-    //WriteConsole(hConsole, "Hello", 5, NULL, NULL);
-    //printf("SKUBIDUBIDUBA");
-    //return 0;
 }
 
 void tick_for_state(int state, int input) {
