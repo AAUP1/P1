@@ -17,47 +17,53 @@
 #define SPECIAL_CHAR_INDICATOR_1 224
 #define SPECIAL_CHAR_INDICATOR_2 0
 
+enum Keyname {
+        //delete has been renamed "DEL" because its a preset from <windows.h>
+        UP = 328, DOWN = 336, LEFT = 331, RIGHT = 333,
+        PAGE_UP = 329, PAGE_DOWN = 337, DEL = 339, SPACE = 32, BACKSPACE = 8};
+typedef enum Keyname Keyname;
+enum StateType {MENU, OVERVIEW, EDIT, SEARCH};
+typedef enum StateType StateType;
+enum StateType current_state = MENU;
+
 /* On-screen object structs */
 struct Box {
     int x, y;
     char* text;
-    int selected;
+    int active;
 };
 typedef struct Box Box;
 
 /* State structs */
 struct Menu {
     int box_amount;
-    struct Box *boxes[3];
-    int selected_box;
+    struct Box boxes[3];
+    int activeBoxIndex;
 };
 typedef struct Menu Menu;
 struct Overview {
-    Box *testBox;
+    Box testBox;
 };
 typedef struct Overview Overview;
 struct EditView {
-    Box *testBox;
+    Box testBox;
 };
 typedef struct EditView EditView;
-
-/* General test function*/
-void updateOnPress(int);
 
 void initStates();
 
 /* Menu functions */
-void initMenu(Menu* menu, Box* boxes, int box_amount, int selected_index);
+void initMenu(Menu* menu, int box_amount, int activeBoxIndex);
 void updateMenu(Menu* menu, int input);
 void drawMenu(Menu* menu);
 
 /* Overview functions */
-void initOverview(Overview* overview, Box* box);
+void initOverview(Overview* overview);
 void updateOverview(Overview* overview, int input);
 void drawOverview(Overview* overview);
 
 /* EditView functions */
-void initEditView(EditView* edit_view, Box* box);
+void initEditView(EditView* edit_view);
 void updateEditView(EditView* edit_view, int input);
 void drawEditView(EditView* edit_view);
 
@@ -79,13 +85,6 @@ void line(char);
 void clear();
 void ConsolePlacement(int, int);
 
-enum keyname {
-        //delete has been renamed "DEL" because its a preset from <windows.h>
-        UP = 328, DOWN = 336, LEFT = 331, RIGHT = 333,
-        PAGE_UP = 329, PAGE_DOWN = 337, DEL = 339, SPACE = 32, BACKSPACE = 8};
-
-enum state {MENU, OVERVIEW, EDIT, SEARCH};
-enum state current_state = MENU;
 int program_is_running = 1;
 
 //value so I can reach it elsewhere!
@@ -99,24 +98,11 @@ EditView editView;
 int main(void) {  
     int character_pressed = '\0';
     
-    Box boxes[3];
-    initBox(boxes+0, 10, 10, "Overview");
-    initBox(boxes+1, 20, 20, "Edit/Add");
-    initBox(boxes+2, 30, 30, "Exit");
-    initMenu(&menu, boxes, 3, 0);
+    initStates();
 
-
-    /* Initializes overview and its contents */
-    Box box;
-    initBox(&box, 10, 10, "OVERVIEWBOX");
-    initOverview(&overview, &box);
-
-    /* Initializes editView and its contents */
-    Box box2;
-    initBox(&box2, 10, 10, "EDITBOX");
-    initEditView(&editView, &box2);
-
-    do {
+    /* Initial draw to the screen before any input is given */
+    redrawState(current_state);
+    while(program_is_running) {
         if(kbhit()) {
             /* Reads a character */
             character_pressed = readCharacter();
@@ -130,40 +116,29 @@ int main(void) {
             //updateOnPress(character_pressed);
 
         }
-    } while(program_is_running);
+    } 
 
     return EXIT_SUCCESS;
-}
-
-//testing function that takes charater input
-void updateOnPress(int character_pressed){
-    clear();
-    //ConsolePlacement(10, 10);
-    line('-');
-    //TESTING IF BOX CAN BE ACTIVE
-            if(character_pressed == 77 || character_pressed == 333){
-                testvalue = 1;
-            } else if(character_pressed == 75 || character_pressed == 331){
-                testvalue = 0;
-            }
-            printf("\n");
-            drawBox("testbox", testvalue, 10, 10);
-            struct Box box;
-            box.selected = 1;
-            box.text = "textbox number 2";
-            box.x = 4;
-            box.y = 6;
-            drawStructBox(&box);
-    //END OF TESTING ACTIVE BOX
-    
 }
 
 /* STATE FUNCTIONS #BEGIN */
 /* Initializes all the structures that represent states and the structures within them */
 void initStates() {
     /*PROGRAM ACTS WEIRD WHEN I PUT INITIALIZERS IN THIS SEPARATE FUNCTION*/
+
     /* Initializes the menu and its contents*/
-    
+    initBox(&(menu.boxes[0]), 10, 10, "Overview");
+    initBox(&(menu.boxes[1]), 20, 20, "Edit/Add");
+    initBox(&(menu.boxes[2]), 30, 30, "Exit");
+    initMenu(&menu, 3, 0);
+
+    /* Initializes overview and its contents */
+    initBox(&(overview.testBox), 10, 10, "Now you are in the overview");
+    initOverview(&overview);
+
+    /* Initializes editView and its contents */
+    initBox(&(editView.testBox), 10, 10, "Now you are editing products");
+    initEditView(&editView);
 }
 
 /* Updates a state with an input parameter */
@@ -202,13 +177,12 @@ void redrawState(int state) {
 }
 
 /* Menu functions */
-void initMenu(Menu* menu, Box* boxes, int box_amount, int selected_index) {
+void initMenu(Menu* menu, int box_amount, int activeBoxIndex) {
     int i;
     /* Initializes all the boxes in the menu */
     menu->box_amount = box_amount;
     for(i = 0; i < box_amount; i++) {
-        menu->boxes[i] = boxes+i;
-        menu->boxes[i]->selected = i == selected_index;
+        menu->boxes[i].active = i == activeBoxIndex;
     }
 }
 void updateMenu(Menu* menu, int input) {
@@ -216,34 +190,34 @@ void updateMenu(Menu* menu, int input) {
     
     /* If the user inputs space, make a selection */
     if(input == SPACE) {
-        /* If the selected box is the exit box, stop the program */
-        if(menu->selected_box == 2) {
+        /* If the active box is the exit box, stop the program */
+        if(menu->activeBoxIndex == 2) {
             program_is_running = 0;
             return;
         }
-        /* If the program did not stop, change the state index to the selected button index */
-        current_state = 1+menu->selected_box;
+        /* If the program did not stop, change the state index to the active box index */
+        current_state = 1+menu->activeBoxIndex;
         return;
     }
 
-    /* Pressing up and down changes the selected box looping around */
+    /* Pressing up and down changes the active box, looping around */
     if(input == DOWN) {
-        menu->selected_box++;
-        if(menu->selected_box >= menu->box_amount) {
-            menu->selected_box = 0;
+        menu->activeBoxIndex++;
+        if(menu->activeBoxIndex >= menu->box_amount) {
+            menu->activeBoxIndex = 0;
         }
     } else if(input == UP) {
-        menu->selected_box--;
-        if(menu->selected_box < 0) {
-            menu->selected_box = menu->box_amount-1;
+        menu->activeBoxIndex--;
+        if(menu->activeBoxIndex < 0) {
+            menu->activeBoxIndex = menu->box_amount-1;
         }
     }
     /* Applies the changes to the boxes on by one */
     for(i = 0; i < menu->box_amount; i++) {
-        if(i == menu->selected_box) {
-            menu->boxes[i]->selected = 1;
+        if(i == menu->activeBoxIndex) {
+            menu->boxes[i].active = 1;
         } else {
-            menu->boxes[i]->selected = 0;
+            menu->boxes[i].active = 0;
         }
     }
 }
@@ -257,14 +231,15 @@ void drawMenu(Menu* menu) {
     printf("   \\ \\_______\\ \\__\\\\ _\\\\ \\_______\\ \\__\\ \\__\\ \\_______\\ \n");
     printf("    \\|_______|\\|__|\\|__|\\|_______|\\|__|\\|__|\\|_______| \n");
     /* Draws all the boxes */
-    drawStructBox(*(menu->boxes+0));
-    drawStructBox(*(menu->boxes+1));
-    drawStructBox(*(menu->boxes+2));
+
+    drawStructBox(&(menu->boxes[0]));
+    drawStructBox(&(menu->boxes[1]));
+    drawStructBox(&(menu->boxes[2]));
 }
 
 /* Overview Functions */
-void initOverview(Overview *overview, Box* box) {
-    overview->testBox = box;
+void initOverview(Overview *overview) {
+
 }
 void updateOverview(Overview *overview, int input) {
     if(input == BACKSPACE) {
@@ -286,12 +261,12 @@ void updateOverview(Overview *overview, int input) {
     /*Draw rows*/
 }
 void drawOverview(Overview *overview) {
-    drawStructBox(overview->testBox);
+    drawStructBox(&(overview->testBox));
 }
 
 /* EditView functions */
-void initEditView(EditView *editView, Box* box) {
-    editView->testBox = box;
+void initEditView(EditView *editView) {
+
 }
 void updateEditView(EditView *editView, int input) {
     if(input == BACKSPACE) {
@@ -299,7 +274,7 @@ void updateEditView(EditView *editView, int input) {
     }
 }
 void drawEditView(EditView *editView) {
-    drawStructBox(editView->testBox);
+    drawStructBox(&(editView->testBox));
 }
 /* STATE FUNCTIONS #END */
 
@@ -309,7 +284,7 @@ void initBox(Box* box, int x, int y, char* text) {
     box->x = x;
     box->y = y;
     box->text = text;
-    box->selected = 0;
+    box->active = 0;
 }
 // makes a menu button: drawBox("text in center", 1/0);
 void drawBox(char* str, int isactive, int x, int y){
@@ -327,6 +302,7 @@ void drawBox(char* str, int isactive, int x, int y){
     }
     printf("\\");
     printf("\n");
+    /* Draws arrow behind box if it is active */
     if(isactive) {
         ConsolePlacement(x - 5, y + 1);
         printf("--->");
@@ -355,7 +331,7 @@ void drawBox(char* str, int isactive, int x, int y){
 }
 // Draws a box using the struct that represents a box
 void drawStructBox(Box* box) {
-    drawBox(box->text, box->selected, box->x, box->y);
+    drawBox(box->text, box->active, box->x, box->y);
 }
 //draws 117 charaters: line('charater');
 void line(char c){
@@ -401,3 +377,31 @@ void ConsolePlacement(int x, int y){
     SetConsoleCursorPosition(hConsole, pos);
 }
 /* CONSOLE FUNCTIONS #END */
+
+
+/*
+
+KNOWN ISSUES:
+    * [[[FIXED]]]   When putting inizializers in a separate function, the program crashes
+
+*/
+
+/*
+
+TODO:
+    * [[[DONE]]]   Change all variable names containing "selected" to "active"
+
+*/
+
+/*
+
+THINGS TO CHECK IF YOU FORGOR:
+    * Creating a new state for the state machine requires following elements to be implemented:
+        1. A struct representing the state with objects associated with this state
+        2. An init function that initializes all variables and structs inside the state struct
+        3. An update function that passes through an input character
+        4. A draw function that types the text into the terminal
+        5. Add this state entry to initStates, updateStates and drawStates
+        !!! See other states for reference
+
+*/
