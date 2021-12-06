@@ -9,9 +9,9 @@ void initMenu(Menu* menu) {
     int i;
     /* Initializes all the boxes in the menu */
     initBox(&(menu->boxes[0]), 10, 10, "Overview");
-    initBox(&(menu->boxes[1]), 20, 20, "Edit Products");
-    initBox(&(menu->boxes[2]), 30, 30, "Add Products");
-    initBox(&(menu->boxes[3]), 40, 40, "Exit");
+    initBox(&(menu->boxes[1]), 15, 15, "Edit Products");
+    initBox(&(menu->boxes[2]), 20, 20, "Add Products");
+    initBox(&(menu->boxes[3]), 25, 25, "Exit");
     menu->box_amount = 4;
     for(i = 0; i < menu->box_amount; i++) {
         menu->boxes[i].active = i == 0;

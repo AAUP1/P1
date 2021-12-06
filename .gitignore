@@ -2,3 +2,4 @@ a.exe
 main.exe
 *.exe
 .vscode\settings.json
+.vscode/settings.json
