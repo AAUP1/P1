@@ -1,4 +1,4 @@
 @echo off
-mode 56,38
+mode 112,38
 
 program.exe

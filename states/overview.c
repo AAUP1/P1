@@ -9,7 +9,16 @@ void initOverview(Overview *overview) {
 void updateOverview(Overview *overview, StateType* currentState, int input) {
     if(input == BACKSPACE) {
         *currentState = MENU;
+    } else if(input == UP) {
+        
+    } else if(input == DOWN) {
+
+    } else if(input == LEFT) {
+        
+    } else if(input == RIGHT) {
+
     }
+
     /*TODO: Handle input*/
     /*Get timestamp*/
     /*Check if text is being written in search. If this is the case, append it to a char array*/

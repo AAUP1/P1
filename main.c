@@ -32,9 +32,6 @@ void redrawState(int state);
 
 int programRunning = 1;
 
-//value so I can reach it elsewhere!
-    int testvalue = 0;
-
 Menu menu;
 Overview overview;
 EditView editView;
