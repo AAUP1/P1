@@ -1,12 +1,9 @@
-struct Product {
-    char* name;
-    int startAmount;
-    int currentAmount;
-    int amountDecrement;
-    int startPrice;
-    int currentPrice;
-    int priceDecrement;
-};
+#include <stdio.h>
+
+/* Gets the definition of the product struct */
+#include "product.h"
+
+void productToString(Product product);
 
 void loadProducts(Product *products, int productAmount, FILE *file);
 void saveProducts(Product *products, int productAmount, FILE *file);

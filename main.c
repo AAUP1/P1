@@ -21,7 +21,7 @@
 #include "states/menu.h"
 #include "states/state.h"
 
-//#include "loadSave.h"
+#include "loadSave.h"
 
 #include "terminal.h"
 #include "UI.h"
@@ -48,7 +48,7 @@ int main(void) {
     initStates();
 
     /* Initial draw to the screen before any input is given */
-    redrawState(currentState);
+    //redrawState(currentState);
     while(programRunning) {
         if(kbhit()) {
             /* Reads a character */

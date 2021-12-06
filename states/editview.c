@@ -14,5 +14,5 @@ void updateEditView(EditView *editView, StateType *currentState, int input) {
 void drawEditView(EditView *editView) {
     drawBox("Now you are editing products", 1, 10, 10);
     drawBox("This is a placement box", 1, 10, 20);
-    listItem();
+    listItem(1);
 }
