@@ -3,7 +3,7 @@
 
 struct Menu {
     int box_amount;
-    struct Box boxes[3];
+    struct Box boxes[4];
     int activeBoxIndex;
 };
 typedef struct Menu Menu;

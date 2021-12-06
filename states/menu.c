@@ -3,13 +3,16 @@
 #include <stdio.h>
 #include "state.h"
 
+#define EXIT_BUTTON_INDEX 3
+
 void initMenu(Menu* menu) {
     int i;
     /* Initializes all the boxes in the menu */
     initBox(&(menu->boxes[0]), 10, 10, "Overview");
-    initBox(&(menu->boxes[1]), 20, 20, "Edit/Add");
-    initBox(&(menu->boxes[2]), 30, 30, "Exit");
-    menu->box_amount = 3;
+    initBox(&(menu->boxes[1]), 20, 20, "Edit Products");
+    initBox(&(menu->boxes[2]), 30, 30, "Add Products");
+    initBox(&(menu->boxes[3]), 40, 40, "Exit");
+    menu->box_amount = 4;
     for(i = 0; i < menu->box_amount; i++) {
         menu->boxes[i].active = i == 0;
     }
@@ -18,9 +21,9 @@ void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int in
     int i;
     
     /* If the user inputs space, make a selection */
-    if(input == SPACE) {
+    if(input == ENTER) {
         /* If the active box is the exit box, stop the program */
-        if(menu->activeBoxIndex == 2) {
+        if(menu->activeBoxIndex == EXIT_BUTTON_INDEX) {
             *programRunning = 0;
             return;
         }
@@ -64,4 +67,5 @@ void drawMenu(Menu* menu) {
     drawStructBox(&(menu->boxes[0]));
     drawStructBox(&(menu->boxes[1]));
     drawStructBox(&(menu->boxes[2]));
+    drawStructBox(&(menu->boxes[3]));
 }

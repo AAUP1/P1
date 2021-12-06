@@ -6,6 +6,6 @@ struct AddView {
 };
 typedef struct AddView AddView;
 
-void initOverview(AddView* overview);
-void updateOverview(AddView* overview, StateType *currentState, int input);
-void drawOverview(AddView* overview);
+void initAddView(AddView* overview);
+void updateAddView(AddView* overview, StateType *currentState, int input);
+void drawAddView(AddView* overview);

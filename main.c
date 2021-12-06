@@ -17,6 +17,7 @@
 //Other local files used in main
 #include "states/overview.h"
 #include "states/editview.h"
+#include "states/addview.h"
 #include "states/menu.h"
 #include "states/state.h"
 #include "terminal.h"
@@ -35,6 +36,7 @@ int programRunning = 1;
 Menu menu;
 Overview overview;
 EditView editView;
+AddView addView;
 
 /* Initializes everything and starts the primary and only loop in the program */
 int main(void) {  
@@ -66,7 +68,6 @@ int main(void) {
 /* STATE FUNCTIONS #BEGIN */
 /* Initializes all the structures that represent states and the structures within them */
 void initStates() {
-    /*PROGRAM ACTS WEIRD WHEN I PUT INITIALIZERS IN THIS SEPARATE FUNCTION*/
 
     /* Initializes the menu and its contents*/
     initMenu(&menu);
@@ -76,6 +77,9 @@ void initStates() {
 
     /* Initializes editView and its contents */
     initEditView(&editView);
+
+    /* Initializes addView and its contents */
+    initAddView(&addView);
 }
 
 /* Updates a state with an input parameter */
@@ -90,8 +94,12 @@ void updateState(int state, int input) {
         case EDIT:
             updateEditView(&editView, &currentState, input);
             break;
+        case ADD:
+            updateAddView(&addView, &currentState, input);
+            break;
         case SEARCH:
-            updateMenu(&menu, &currentState, &programRunning, input); break;
+            updateMenu(&menu, &currentState, &programRunning, input); 
+            break;
     }
 }
 /* Redraws the state in the terminal */
@@ -106,6 +114,9 @@ void redrawState(int state) {
             break;
         case EDIT:
             drawEditView(&editView);
+            break;
+        case ADD:
+            drawAddView(&addView);
             break;
         case SEARCH:
             drawEditView(&editView); /* DIS IS NOT SEARCH!!!

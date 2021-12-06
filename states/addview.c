@@ -2,14 +2,14 @@
 #include "state.h"
 #include "../terminal.h"
 
-void initEditView(AddView *addView) {
-
+void initAddView(AddView *addView) {
+    initBox(&(addView->testBox), 10, 10, "Now you are adding products");
 }
-void updateEditView(AddView *addView, StateType *currentState, int input) {
+void updateAddView(AddView *addView, StateType *currentState, int input) {
     if(input == BACKSPACE) {
         *currentState = MENU;
     }
 }
-void drawEditView(AddView *addView) {
+void drawAddView(AddView *addView) {
     drawStructBox(&(addView->testBox));
 }
