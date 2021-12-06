@@ -72,11 +72,9 @@ void initStates() {
     initMenu(&menu);
 
     /* Initializes overview and its contents */
-    initBox(&(overview.testBox), 10, 10, "Now you are in the overview");
     initOverview(&overview);
 
     /* Initializes editView and its contents */
-    initBox(&(editView.testBox), 10, 10, "Now you are editing products");
     initEditView(&editView);
 }
 
