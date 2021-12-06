@@ -21,7 +21,7 @@
 #include "states/menu.h"
 #include "states/state.h"
 #include "terminal.h"
-#include "box.h"
+#include "UI.h"
 
 StateType currentState = MENU;
 

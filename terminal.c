@@ -42,9 +42,3 @@ int mapNonASCIICharacter(char character) {
 }
 
 
-void line(char c){
-    for(int i = 0; i < 117; i++){
-        wprintf(L"%c", c);
-    }
-    printf("\n");
-}

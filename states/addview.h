@@ -1,4 +1,4 @@
-#include "../box.h"
+#include "../UI.h"
 #include "state.h"
 
 struct AddView {
@@ -6,6 +6,6 @@ struct AddView {
 };
 typedef struct AddView AddView;
 
-void initAddView(AddView* overview);
-void updateAddView(AddView* overview, StateType *currentState, int input);
-void drawAddView(AddView* overview);
+void initAddView(AddView* AddView);
+void updateAddView(AddView* AddView, StateType *currentState, int input);
+void drawOAddView(AddView* AddView);

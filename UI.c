@@ -61,3 +61,11 @@ void drawBox(char* str, int isactive, int x, int y){
 void drawStructBox(Box* box) {
     drawBox(box->text, box->active, box->x, box->y);
 }
+
+
+void line(char c){
+    for(int i = 0; i < 117; i++){
+        wprintf(L"%c", c);
+    }
+    printf("\n");
+}

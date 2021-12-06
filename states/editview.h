@@ -1,4 +1,4 @@
-#include "../box.h"
+#include "../UI.h"
 #include "state.h"
 
 struct EditView {
