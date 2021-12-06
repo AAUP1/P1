@@ -2,7 +2,7 @@
 #include "state.h"
 
 struct Overview {
-    Box testBox;
+    
 };
 typedef struct Overview Overview;
 

@@ -14,12 +14,15 @@
 //used for placing cursor in console
 #include <windows.h>
 
-//Other local files used in main
+//Used for representing the states
 #include "states/overview.h"
 #include "states/editview.h"
 #include "states/addview.h"
 #include "states/menu.h"
 #include "states/state.h"
+
+//#include "loadSave.h"
+
 #include "terminal.h"
 #include "UI.h"
 
@@ -41,7 +44,7 @@ AddView addView;
 /* Initializes everything and starts the primary and only loop in the program */
 int main(void) {  
     int characterPressed = '\0';
-    
+
     initStates();
 
     /* Initial draw to the screen before any input is given */

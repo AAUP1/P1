@@ -1,17 +1,10 @@
-#include "box.h"
+#include "UI.h"
 #include "terminal.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <windows.h>
 
-// Initializes a box object with the given values
-void initBox(Box* box, int x, int y, char* text) {
-    box->x = x;
-    box->y = y;
-    box->text = text;
-    box->active = 0;
-}
 // makes a menu button: drawBox("text in center", 1/0);
 void drawBox(char* str, int isactive, int x, int y){
     //takes the lengh of the input and uses it    
@@ -56,10 +49,6 @@ void drawBox(char* str, int isactive, int x, int y){
         }
     }
     printf("/\n");
-}
-// Draws a box using the struct that represents a box
-void drawStructBox(Box* box) {
-    drawBox(box->text, box->active, box->x, box->y);
 }
 
 

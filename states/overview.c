@@ -4,7 +4,7 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
-    initBox(&(overview->testBox), 10, 10, "Now you are in the overview");
+
 }
 void updateOverview(Overview *overview, StateType* currentState, int input) {
     if(input == BACKSPACE) {
@@ -35,5 +35,5 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
     /*Draw rows*/
 }
 void drawOverview(Overview *overview) {
-    drawStructBox(&(overview->testBox));
+    drawBox("Now you are in the overview", 0, 10, 10);
 }
