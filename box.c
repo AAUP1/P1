@@ -32,6 +32,8 @@ void drawBox(char* str, int isactive, int x, int y){
     if(isactive) {
         ConsolePlacement(x - 5, y + 1);
         printf("--->");
+        ConsolePlacement(x + strL + 5, y + 1);
+        printf("<---");
     }
     ConsolePlacement(x, y + 1);
     printf("| ");

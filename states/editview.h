@@ -3,6 +3,7 @@
 
 struct EditView {
     Box testBox;
+    Box box2;
 };
 typedef struct EditView EditView;
 
