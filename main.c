@@ -69,10 +69,7 @@ void initStates() {
     /*PROGRAM ACTS WEIRD WHEN I PUT INITIALIZERS IN THIS SEPARATE FUNCTION*/
 
     /* Initializes the menu and its contents*/
-    initBox(&(menu.boxes[0]), 10, 10, "Overview");
-    initBox(&(menu.boxes[1]), 20, 20, "Edit/Add");
-    initBox(&(menu.boxes[2]), 30, 30, "Exit");
-    initMenu(&menu, 3, 0);
+    initMenu(&menu);
 
     /* Initializes overview and its contents */
     initBox(&(overview.testBox), 10, 10, "Now you are in the overview");

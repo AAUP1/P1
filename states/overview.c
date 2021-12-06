@@ -4,13 +4,13 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
-
+    initBox(&(overview->testBox), 10, 10, "Now you are in the overview");
 }
 void updateOverview(Overview *overview, StateType* currentState, int input) {
     if(input == BACKSPACE) {
         *currentState = MENU;
     } else if(input == UP) {
-        
+
     } else if(input == DOWN) {
 
     } else if(input == LEFT) {

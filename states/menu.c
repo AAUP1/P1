@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include "state.h"
 
-void initMenu(Menu* menu, int box_amount, int activeBoxIndex) {
+void initMenu(Menu* menu) {
     int i;
     /* Initializes all the boxes in the menu */
-    menu->box_amount = box_amount;
-    for(i = 0; i < box_amount; i++) {
-        menu->boxes[i].active = i == activeBoxIndex;
+    initBox(&(menu->boxes[0]), 10, 10, "Overview");
+    initBox(&(menu->boxes[1]), 20, 20, "Edit/Add");
+    initBox(&(menu->boxes[2]), 30, 30, "Exit");
+    menu->box_amount = 3;
+    for(i = 0; i < menu->box_amount; i++) {
+        menu->boxes[i].active = i == 0;
     }
 }
 void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int input) {
