@@ -51,10 +51,33 @@ void drawBox(char* str, int isactive, int x, int y){
     printf("/\n");
 }
 
-
+//draws a line across the screen!
 void line(char c){
-    for(int i = 0; i < 117; i++){
+    for(int i = 0; i < 112; i++){
         wprintf(L"%c", c);
     }
     printf("\n");
+}
+void listItem(int y){
+    ConsolePlacement(0, y);
+    line('-');
+    //digit
+    printf("1.");
+    // product name
+    ConsolePlacement(4, y + 1);
+    printf("DONUTS");
+    // Amount
+    ConsolePlacement(19, y + 1);
+    printf("Product amount");
+    // Start price
+    ConsolePlacement(34, y + 1);
+    printf("SP");
+    // Live price
+    ConsolePlacement(49, y + 1);
+    printf("LP");
+    // Decriment
+    ConsolePlacement(64, y + 1);
+    printf("Decriment");
+    printf("\n");
+    line('-');
 }

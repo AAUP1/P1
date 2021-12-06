@@ -18,7 +18,6 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
     } else if(input == RIGHT) {
 
     }
-
     /*TODO: Handle input*/
     /*Get timestamp*/
     /*Check if text is being written in search. If this is the case, append it to a char array*/
@@ -35,5 +34,15 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
     /*Draw rows*/
 }
 void drawOverview(Overview *overview) {
-    drawBox("Now you are in the overview", 0, 10, 10);
+    //drawBox("Now you are in the overview", 0, 10, 10);
+    
+    listItem(1);
+    listItem(4);
+    listItem(7);
+    listItem(10);
+    listItem(13);
+    listItem(16);
+    listItem(19);
+    listItem(22);
+
 }
