@@ -32,6 +32,18 @@ void saveProducts(Product *products, int productAmount, FILE *file) {
 
 }
 
+int countLinesInFile(FILE *f) {
+    char currentChar = '\n';
+    int lines = 0;
+    while(!feof(f)) {
+        currentChar = fgetc(f);
+        if(currentChar == '\n') {
+            lines++;
+        }
+    }
+    return lines;
+}
+
 void productToString(Product product) {
     printf("PRODUCT [Name: %s, StartAmount: %d, CurrentAmount: %d, AmountDecrement: %d, StartPrice: %d, CurrentPrice: %d, PriceDecrement: %d \n", 
             product.name, product.startAmount, product.currentAmount, product.amountDecrement,
