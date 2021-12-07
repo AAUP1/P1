@@ -46,7 +46,7 @@ int main(void) {
     initStates();
 
     /* Initial draw to the screen before any input is given */
-    //redrawState(currentState);
+    redrawState(currentState);
     while(programRunning) {
         if(kbhit()) {
             /* Reads a character */

@@ -9,11 +9,7 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
-    FILE *file = fopen("products.txt", "r");
-    int productAmount = countLinesInFile(file);
-    overview->productAmount = productAmount;
-    fclose(file);
-    loadProducts(overview->products, &productAmount);
+    loadProducts(overview->products, &overview->productAmount);
 
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
@@ -31,6 +27,9 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
         
     } else if(input == RIGHT) {
 
+    } else if(input == DEL) {
+        removeProduct(overview->searchText, overview);
+        saveProducts(overview->products, &(overview->productAmount));
     } else {
         overview->searchText[overview->searchTextLength] = input;
         overview->searchText[overview->searchTextLength+1] = '\0';
@@ -53,7 +52,7 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
 }
 void drawOverview(Overview *overview) {
     //drawBox("Now you are in the overview", 0, 10, 10);
-    printf("%s", overview->searchText);
+    printf("Search: %s", overview->searchText);
     int i;
     overviewUI();
     drawProducts(overview);
@@ -61,7 +60,7 @@ void drawOverview(Overview *overview) {
 }
 void drawProducts(Overview *overview) {
     int i, y = 0;
-    for(i = 0; i < overview->productAmount & i < ((38 - 4) / 3); i++) {
+    for(i = 0; i < overview->productAmount && y < ((38 - 4) / 3); i++) {
         Product *currentProduct = (overview->products+i);
         if(strstr(currentProduct->name, overview->searchText)) {
             y++;
@@ -77,10 +76,21 @@ void addProduct(Overview* overview) {
     overview->productAmount++;
 }
 void removeProduct(char *name, Overview *overview) {
-    /*int found
+    int found = 0;
     for(int i = 0; i < overview->productAmount; i++) {
-        if(overview->products->name) {
-
+        if(!strcmp(overview->products[i].name, name)) {
+            found = 1;
         }
-    }*/
+        if(found) {
+            if(i == overview->productAmount-1) {
+                //Do nothing if we have reached the end of the array, as the length will just be shortened
+            } else {
+                //Moves the products one space down
+                overview->products[i] = overview->products[i+1];
+            }
+        }
+    }
+    if(found) {
+        overview->productAmount--;
+    }
 }
