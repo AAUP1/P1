@@ -67,17 +67,31 @@ void listItem(int y){
     ConsolePlacement(4, y + 1);
     printf("DONUTS");
     // Amount
-    ConsolePlacement(19, y + 1);
+    ConsolePlacement(20, y + 1);
     printf("Product amount");
     // Start price
-    ConsolePlacement(34, y + 1);
+    ConsolePlacement(50, y + 1);
     printf("SP");
     // Live price
-    ConsolePlacement(49, y + 1);
+    ConsolePlacement(75, y + 1);
     printf("LP");
     // Decriment
-    ConsolePlacement(64, y + 1);
-    printf("Decriment");
+    ConsolePlacement(103, y + 1);
+    printf("3%%");
     printf("\n");
     line('-');
+}
+void overviewUI(){
+    ConsolePlacement(0,0);
+    line('-');
+    ConsolePlacement(2, 1);
+    printf("Product name");
+    ConsolePlacement(20, 1);
+    printf("Product amount");
+    ConsolePlacement(45, 1);
+    printf("Start Price");
+    ConsolePlacement(71, 1);
+    printf("Live Price");
+    ConsolePlacement(100, 1);
+    printf("Decriment");
 }

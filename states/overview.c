@@ -35,8 +35,7 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
 }
 void drawOverview(Overview *overview) {
     //drawBox("Now you are in the overview", 0, 10, 10);
-    
-    listItem(1);
+    overviewUI();
     listItem(4);
     listItem(7);
     listItem(10);
@@ -44,5 +43,6 @@ void drawOverview(Overview *overview) {
     listItem(16);
     listItem(19);
     listItem(22);
+    listItem(25);
 
 }
