@@ -17,7 +17,6 @@
 //Used for representing the states
 #include "states/overview.h"
 #include "states/editview.h"
-#include "states/addview.h"
 #include "states/menu.h"
 #include "states/state.h"
 
@@ -39,7 +38,6 @@ int programRunning = 1;
 Menu menu;
 Overview overview;
 EditView editView;
-AddView addView;
 
 /* Initializes everything and starts the primary and only loop in the program */
 int main(void) {  
@@ -80,9 +78,6 @@ void initStates() {
 
     /* Initializes editView and its contents */
     initEditView(&editView);
-
-    /* Initializes addView and its contents */
-    initAddView(&addView);
 }
 
 /* Updates a state with an input parameter */
@@ -96,9 +91,6 @@ void updateState(int state, int input) {
             break;
         case EDIT:
             updateEditView(&editView, &currentState, input);
-            break;
-        case ADD:
-            updateAddView(&addView, &currentState, input);
             break;
         case SEARCH:
             updateMenu(&menu, &currentState, &programRunning, input); 
@@ -117,9 +109,6 @@ void redrawState(int state) {
             break;
         case EDIT:
             drawEditView(&editView);
-            break;
-        case ADD:
-            drawAddView(&addView);
             break;
         case SEARCH:
             drawEditView(&editView); /* DIS IS NOT SEARCH!!!

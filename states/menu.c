@@ -9,7 +9,7 @@
 
 void initMenu(Menu* menu) {
     menu->activeBoxIndex = 0;
-    menu->box_amount = 4;
+    menu->box_amount = 3;
 }
 void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int input) {
     int i;
@@ -52,7 +52,6 @@ void drawMenu(Menu* menu) {
 
     drawBox("Overview", menu->activeBoxIndex == OVERVIEW, 10, 10);
     drawBox("Edit Products", menu->activeBoxIndex == EDIT, 15, 15);
-    drawBox("Add Products", menu->activeBoxIndex == ADD, 20, 20);
-    drawBox("Exit", menu->activeBoxIndex == EXIT_INDEX, 25, 25);
+    drawBox("Exit", menu->activeBoxIndex == EXIT_INDEX, 20, 20);
 
 }
