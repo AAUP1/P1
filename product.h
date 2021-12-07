@@ -1,4 +1,5 @@
-
+#ifndef PRODUCT
+#define PRODUCT
 struct Product {
     char* name;
     int startAmount;
@@ -9,3 +10,4 @@ struct Product {
     int priceDecrement;
 };
 typedef struct Product Product;
+#endif

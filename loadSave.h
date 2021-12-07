@@ -5,8 +5,13 @@
 
 void productToString(Product product);
 
-void loadProducts(Product *products, int productAmount, FILE *file);
-void saveProducts(Product *products, int productAmount, FILE *file);
+#ifndef PRODUCT_SAVELOAD
+#define PRODUCT_SAVELOAD
+void loadProducts(Product *products, int *productAmount);
+void saveProducts(Product *products, int *productAmount);
+#endif
+
+int countLinesInFile(FILE *f);
 
 /*void loadGlobals(int *globals, int globalAmount, FILE *file) {
 

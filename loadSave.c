@@ -4,9 +4,11 @@
 
 #define MAX_NAME_LENGTH 32
 
-void loadProducts(Product *products, int productAmount, FILE *file) {
+void loadProducts(Product *products, int *productAmount) {
+    printf("LOADING   %d", *productAmount);
+    FILE *file = fopen("products.txt", "r");
     int i;
-    for(i = 0; i < productAmount; i++) {
+    for(i = 0; i < *productAmount; i++) {
         char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
         int startAmount, currentAmount, amountDecrement, startPrice, currentPrice, priceDecrement;
         fscanf(file, " %s %d %d %d %d %d %d", name, &startAmount, &currentAmount, &amountDecrement, &startPrice, &currentPrice, &priceDecrement);
@@ -17,19 +19,20 @@ void loadProducts(Product *products, int productAmount, FILE *file) {
         products[i].startPrice = startPrice;
         products[i].currentPrice = currentPrice;
         products[i].priceDecrement = priceDecrement;
-
     }
+    fclose(file);
 }
 
-void saveProducts(Product *products, int productAmount, FILE *file) {
+void saveProducts(Product *products, int *productAmount) {
+    FILE *file = fopen("products.txt", "w");
     int i;
-    for(i = 0; i < productAmount; i++) {
+    for(i = 0; i < *productAmount; i++) {
         fprintf(file, "%s %d %d %d %d %d %d \n", 
             products[i].name, 
             products[i].startAmount, products[i].currentAmount, products[i].amountDecrement, 
             products[i].startPrice, products[i].currentPrice, products[i].priceDecrement);
     }
-
+    fclose(file);
 }
 
 int countLinesInFile(FILE *f) {

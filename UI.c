@@ -58,40 +58,40 @@ void line(char c){
     }
     printf("\n");
 }
-void listItem(int y){
+void listItem(int y, int index, char *name, int amount, int startPrice, int livePrice, int decrement) {
     ConsolePlacement(0, y);
     line('-');
     //digit
     printf("1.");
     // product name
     ConsolePlacement(4, y + 1);
-    printf("DONUTS");
+    printf("%s", name);
     // Amount
     ConsolePlacement(20, y + 1);
-    printf("Product amount");
+    printf("%d", amount);
     // Start price
     ConsolePlacement(50, y + 1);
-    printf("SP");
+    printf("%d", startPrice);
     // Live price
     ConsolePlacement(75, y + 1);
-    printf("LP");
+    printf("%d", livePrice);
     // Decriment
     ConsolePlacement(103, y + 1);
-    printf("3%%");
+    printf("%% %d", decrement);
     printf("\n");
     line('-');
 }
 void overviewUI(){
-    ConsolePlacement(0,0);
+    ConsolePlacement(0,1);
     line('-');
-    ConsolePlacement(2, 1);
+    ConsolePlacement(2, 2);
     printf("Product name");
-    ConsolePlacement(20, 1);
+    ConsolePlacement(20, 2);
     printf("Product amount");
-    ConsolePlacement(45, 1);
+    ConsolePlacement(45, 2);
     printf("Start Price");
-    ConsolePlacement(71, 1);
+    ConsolePlacement(71, 2);
     printf("Live Price");
-    ConsolePlacement(100, 1);
-    printf("Decriment");
+    ConsolePlacement(100, 2);
+    printf("Decrement");
 }
