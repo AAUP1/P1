@@ -8,7 +8,9 @@ void loadProducts(Product *products, int *productAmount) {
     FILE *file = fopen("products.txt", "r");
     if(file != NULL) {
         int i;
+        /* Scans the productAmount */
         fscanf(file, " %d", productAmount);
+        /* Scans for all the variables in all the products and saves them to a product array */
         for(i = 0; i < *productAmount; i++) {
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
             int startAmount, currentAmount, amountDecrement, startPrice, currentPrice, priceDecrement;
@@ -30,7 +32,9 @@ void loadProducts(Product *products, int *productAmount) {
 void saveProducts(Product *products, int *productAmount) {
     FILE *file = fopen("products.txt", "w");
     int i;
+    /* Saves the new product amount to the file */
     fprintf(file, "%d \n", *productAmount);
+    /* Saves the new product variables to the file */
     for(i = 0; i < *productAmount; i++) {
         fprintf(file, "%s %d %d %d %d %d %d \n", 
             products[i].name, 
