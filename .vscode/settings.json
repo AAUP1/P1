@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "editview.h": "c"
+        "editview.h": "c",
+        "overview.h": "c"
     }
 }

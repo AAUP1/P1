@@ -90,7 +90,7 @@ void updateState(int state, int input) {
             updateOverview(&overview, &currentState, input);
             break;
         case EDIT:
-            updateEditView(&editView, &currentState, input);
+            updateEditView(&editView, &currentState, &overview, input);
             break;
         case SEARCH:
             updateMenu(&menu, &currentState, &programRunning, input); 
