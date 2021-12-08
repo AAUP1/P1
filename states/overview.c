@@ -17,8 +17,13 @@ void initOverview(Overview *overview) {
 void updateOverview(Overview *overview, StateType* currentState, int input) {
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
-        overview->searchTextLength--;
-        overview->searchText[overview->searchTextLength] = '\0';
+        if(overview->searchTextLength >= 1){
+            overview->searchTextLength--;
+            overview->searchText[overview->searchTextLength] = '\0';
+        } else {
+            *currentState = MENU;
+        }
+        
     } else if(input == UP) {
         /*Adds a product and saves the new selection*/
         addProduct(overview);
