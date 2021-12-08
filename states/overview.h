@@ -5,6 +5,8 @@
 #define MAX_PRODUCT_AMOUNT 128
 #define MAX_TEXT_LENGTH 32
 
+#ifndef OVERVIEW_DEFINED
+#define OVERVIEW_DEFINED
 struct Overview {
     Product products[MAX_PRODUCT_AMOUNT];
     char searchText[MAX_TEXT_LENGTH];
@@ -12,6 +14,7 @@ struct Overview {
     int productAmount;
 };
 typedef struct Overview Overview;
+#endif
 
 void initOverview(Overview* overview);
 void updateOverview(Overview* overview, StateType *currentState, int input);
