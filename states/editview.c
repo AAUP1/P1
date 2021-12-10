@@ -15,10 +15,13 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
         if(overview->searchTextLength >= 1){
-            if(editingproduct == 0){
+            if(editingproduct == 1){
+                Product->nameLength--;
+                Product->tempName[Product->nameLength] = '\0';
+            } else{
                 overview->searchTextLength--;
                 overview->searchText[overview->searchTextLength] = '\0';
-            } else{}            
+            }            
         } else {
             *currentState = MENU;
         }
