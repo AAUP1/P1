@@ -38,6 +38,7 @@ int programRunning = 1;
 Menu menu;
 Overview overview;
 EditView editView;
+Product product;
 
 /* Initializes everything and starts the primary and only loop in the program */
 int main(void) {  
@@ -90,7 +91,7 @@ void updateState(int state, int input) {
             updateOverview(&overview, &currentState, input);
             break;
         case EDIT:
-            updateEditView(&editView, &currentState, &overview, input);
+            updateEditView(&editView, &currentState, &overview, input, &product);
             break;
         case SEARCH:
             updateMenu(&menu, &currentState, &programRunning, input); 
@@ -108,10 +109,10 @@ void redrawState(int state) {
             drawOverview(&overview);
             break;
         case EDIT:
-            drawEditView(&editView, &overview);
+            drawEditView(&editView, &overview, &product);
             break;
         case SEARCH:
-            drawEditView(&editView, &overview); /* DIS IS NOT SEARCH!!!
+            drawEditView(&editView, &overview, &product); /* DIS IS NOT SEARCH!!!
                                         no shit sherlock it points to editView :) - Bjørn*/
     }
 }

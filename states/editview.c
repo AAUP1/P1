@@ -10,7 +10,7 @@ char chartest[32];
 void initEditView(EditView *editView) {
 
 }
-void updateEditView(EditView *editView, StateType *currentState, Overview *overview, int input) {
+void updateEditView(EditView *editView, StateType *currentState, Overview *overview, int input, Product *Product) {
     
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
@@ -18,7 +18,7 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
             if(editingproduct == 0){
                 overview->searchTextLength--;
                 overview->searchText[overview->searchTextLength] = '\0';
-            }            
+            } else{}            
         } else {
             *currentState = MENU;
         }
@@ -33,12 +33,15 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
         editingproduct = 0;
     } else if(input == ENTER){
         if(overview->searchTextLength >= 1){
-            editingproduct = 1;                    
+            editingproduct = 1;
+
         }
     }else {
         
         if(editingproduct == 1){
-            
+            Product->tempName[Product->nameLength] = input;
+            Product->tempName[Product->nameLength+1] = '\0';
+            Product->nameLength++;
         } else {
             /*Adds a character to the searchText*/
             overview->searchText[overview->searchTextLength] = input;
@@ -47,7 +50,7 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
         }        
     }
 }
-void drawEditView(EditView *editView, Overview *overview) {
+void drawEditView(EditView *editView, Overview *overview, Product *product) {
     
     /*Draws temporary search box*/
     ConsolePlacement(20, 0);
@@ -60,6 +63,6 @@ void drawEditView(EditView *editView, Overview *overview) {
     if(editingproduct == 1){
 
         ConsolePlacement(4, 8);
-        //printf
+        printf("%s", product->tempName);        
     }    
 }
