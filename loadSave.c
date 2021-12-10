@@ -22,6 +22,8 @@ void loadProducts(Product *products, int *productAmount) {
             products[i].startPrice = startPrice;
             products[i].currentPrice = currentPrice;
             products[i].priceDecrement = priceDecrement;
+
+            products[i].expectedAmount = startAmount;
         }
         fclose(file);
     } else {

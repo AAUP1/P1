@@ -1,5 +1,6 @@
 #include "UI.h"
 #include "terminal.h"
+#include "product.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -58,26 +59,26 @@ void line(char c){
     }
     printf("\n");
 }
-void listItem(int y, int index, char *name, int amount, int startPrice, int livePrice, int decrement) {
+void listItem(int y, int index, Product *product) {
     ConsolePlacement(0, y);
     line('-');
     //digit
     printf("%d.", index);
     // product name
     ConsolePlacement(4, y + 1);
-    printf("%s", name);
+    printf("%s", product->name);
     // Amount
     ConsolePlacement(20, y + 1);
-    printf("%d", amount);
+    printf("%d [%d]", product->currentAmount, product->expectedAmount);
     // Start price
     ConsolePlacement(50, y + 1);
-    printf("%d", startPrice);
+    printf("%d", product->startPrice);
     // Live price
     ConsolePlacement(75, y + 1);
-    printf("%d", livePrice);
+    printf("%d", product->currentPrice);
     // Decriment
     ConsolePlacement(103, y + 1);
-    printf("%% %d", decrement);
+    printf("%% %d", product->currentPriceDecrement);
     printf("\n");
     line('-');
 }

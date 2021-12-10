@@ -18,12 +18,15 @@ void initOverview(Overview *overview) {
 
     updateTime(overview);
     loadStartTime(&(overview->startHour), &(overview->startMinute));
+    resetTime(overview);
     overview->minutesBetweenUpdates = 120;
 
     loadProducts(overview->products, &overview->productAmount);
 
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
+
+    srand(time(NULL));
 }
 void updateOverview(Overview *overview, StateType* currentState, int input) {
     if(input == BACKSPACE) {
@@ -57,6 +60,19 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
         /*Removes a product and saves the new selection*/
         removeProduct(overview->searchText, overview);
         saveProducts(overview->products, &(overview->productAmount));
+    } else if(input == PAGE_UP) {
+        overview->timeSkipped += 20 * 60;
+        for(int i = 0; i < overview->productAmount; i++) {
+            overview->products[i].currentAmount -= rand() % 10;
+            if(overview->products[i].currentAmount < 0) {
+                overview->products[i].currentAmount = 0;
+            }
+        }
+    } else if(input == PAGE_DOWN) {
+        overview->timeSkipped -= 20 * 60;
+    } else if(input == HOME) {
+        resetTime(overview);
+        resetProducts(overview->products, overview->productAmount);
     } else {
         /*Adds a character to the searchText*/
         overview->searchText[overview->searchTextLength] = input;
@@ -66,15 +82,12 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
     
     /*Handle the time of day*/
     updateTime(overview);
-    int minutesSinceStart = (overview->hour - overview->startHour)*60 + (overview->minute - overview->startMinute);
-    if(minutesSinceStart <= 0) {
-        overview->nextHour = overview->startHour;
-        overview->nextMinute = overview->startMinute;
-    } else {
-        for(int i = 0; i < minutesSinceStart; i += overview->minutesBetweenUpdates) {
-            
-        }
+    if(overview->hour > overview->nextHour || (overview->hour == overview->nextHour && overview->minute > overview->nextMinute)) {
+        setNextTime(overview);
+        iterateProductPrices(overview->products, overview->productAmount);   
     }
+    
+    
 }
 void drawOverview(Overview *overview) {
     /*Draws temporary search box*/
@@ -100,15 +113,21 @@ void drawProducts(Overview *overview) {
         /* If searchText is equal to a substring of the name of the product, draw it */
         if(strstr(strToLower(currentProduct->name), strToLower(overview->searchText))) {
             y++;
-            listItem(4 + y * 3, y, currentProduct->name, currentProduct->currentAmount, 
-                currentProduct->startPrice, currentProduct->currentPrice, currentProduct->amountDecrement);
+            listItem(4 + y * 3, y, currentProduct);
         }
     }
 }
 
 void addProduct(Overview* overview) {
     Product *newProduct = &((overview->products)[overview->productAmount]);
-    newProduct->name = "Dont";
+    newProduct->name = "Pizzasnails";
+    newProduct->startAmount = 1000;
+    newProduct->amountDecrement = 10;
+    newProduct->startPrice = 100;
+    newProduct->priceDecrement = 8;
+
+    resetProduct(*newProduct);
+
     overview->productAmount++;
 }
 void removeProduct(char *name, Overview *overview) {
@@ -132,10 +151,40 @@ void removeProduct(char *name, Overview *overview) {
         overview->productAmount--;
     }
 }
+void resetProducts(Product *products, int productAmount) {
+    for(int i = 0; i < productAmount; i++) {
+        resetProduct(products[i]);
+    }
+}
+void resetProduct(Product product) {
+    product.currentAmount = product.startAmount;
+    product.currentPrice = product.startPrice;
+    product.expectedAmount = product.startAmount;
+    product.currentPriceDecrement = 0;
+    product.currentAmountDecrement = 0;
+}
+void iterateProductPrices(Product *products, int productAmount) {
+    for(int i = 0; i < productAmount; i++) {
+            Product *product = &(products[i]);
+            product->currentAmountDecrement += product->amountDecrement;
+            if(product->currentAmountDecrement > 100) {
+                product->currentAmountDecrement = 100;
+            }
+            product->expectedAmount = product->startAmount - (product->startAmount * product->currentAmountDecrement / 100.0);
+            if(product->currentAmount > product->expectedAmount) {
+                product->currentPriceDecrement += product->priceDecrement;
+                if(product->currentPriceDecrement > 100) {
+                    product->currentPriceDecrement = 100;
+                }
+                product->currentPrice = product->startPrice - (product->startPrice * product->currentPriceDecrement / 100.0);
+            }
+        } 
+}
 
 void updateTime(Overview *overview) {
     long int seconds;
     time(&seconds);
+    seconds += overview->timeSkipped;
     struct tm *time = localtime(&seconds);
     overview->second = time->tm_sec;
     overview->minute = time->tm_min;
@@ -144,6 +193,26 @@ void updateTime(Overview *overview) {
     overview->day = time->tm_mday;
     overview->month = 1+time->tm_mon;
     overview->year = 1900+time->tm_year;
+}
+void resetTime(Overview *overview) {
+    overview->nextHour = overview->startHour;
+    overview->nextMinute = overview->startMinute;
+    overview->lastHour = 0;
+    overview->lastMinute = 0; 
+    overview->timeSkipped = 0;
+}
+void setNextTime(Overview *overview) {
+    overview->lastHour = overview->nextHour;
+    overview->lastMinute = overview->nextMinute;
+    overview->nextHour += overview->minutesBetweenUpdates/60;
+    overview->nextMinute += overview->minutesBetweenUpdates%60;
+    if(overview->nextMinute >= 60) {
+        overview->nextHour++;
+        overview->nextMinute -= 60;
+    }
+    if(overview->nextHour >= 24) {
+        overview->nextHour -= 24;
+    }
 }
 
 char *strToLower(char *str) {
@@ -159,3 +228,5 @@ char *strToLower(char *str) {
     strTemp[i] = '\0';
     return strTemp;
 }
+
+/*KNOWN ISSUE: The resetting and loading of products does not work correctly*/

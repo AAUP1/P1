@@ -16,7 +16,8 @@ struct Overview {
     int productAmount;
     int startHour, startMinute;
     int nextHour, nextMinute;
-    int minutesBetweenUpdates;
+    int lastHour, lastMinute;
+    int minutesBetweenUpdates, timeSkipped;
     int year, month, day, hour, minute, second;
     OverviewState state;
 };
@@ -31,7 +32,12 @@ void drawProducts(Overview *overview);
 
 void addProduct(Overview* overview);
 void removeProduct(char *name, Overview *overview);
+void resetProducts(Product *products, int productAmount);
+void resetProduct(Product product);
+void iterateProductPrices(Product *products, int productAmount);
 
+void setNextTime(Overview *overview);
 void updateTime(Overview *overview);
+void resetTime(Overview *overview);
 
 char *strToLower(char *str);
