@@ -61,3 +61,16 @@ void productToString(Product product) {
             product.name, product.startAmount, product.currentAmount, product.amountDecrement,
             product.startPrice, product.currentAmount, product.priceDecrement);
 }
+
+void saveStartTime(int startHour, int startMinute) {
+    FILE *file;
+    file = fopen("startTime.txt", "w");
+    fprintf(file, "%d:%d", startHour, startMinute);
+    fclose(file);
+}
+void loadStartTime(int *startHour, int *startMinute) {
+    FILE *file;
+    file = fopen("startTime.txt", "r");
+    fscanf(file, "%d:%d", startHour, startMinute);
+    fclose(file);
+}

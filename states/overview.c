@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <math.h>
+//Is used to make all letters lowercase, making the search function in drawProducts case insensitive
+#include <ctype.h>
 
 /* overview.h also includes product.h */
 #include "overview.h"
@@ -9,6 +14,12 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
+    overview->state = Searching;
+
+    updateTime(overview);
+    loadStartTime(&(overview->startHour), &(overview->startMinute));
+    overview->minutesBetweenUpdates = 120;
+
     loadProducts(overview->products, &overview->productAmount);
 
     overview->searchTextLength = 0;
@@ -25,15 +36,23 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
         }
         
     } else if(input == UP) {
-        /*Adds a product and saves the new selection*/
-        addProduct(overview);
-        saveProducts(overview->products, &(overview->productAmount));
+        if(overview->state == ChangingTime) {
+            overview->startHour++;
+            saveStartTime(overview->startHour, overview->startMinute);
+        } else {
+            /*Adds a product and saves the new selection*/
+            addProduct(overview);
+            saveProducts(overview->products, &(overview->productAmount));
+        }
     } else if(input == DOWN) {
-
+        if(overview->state == ChangingTime) {
+            overview->startHour--;
+            saveStartTime(overview->startHour, overview->startMinute);
+        }
     } else if(input == LEFT) {
-        
+        overview->state = ChangingTime;
     } else if(input == RIGHT) {
-
+        overview->state = Searching;
     } else if(input == DEL) {
         /*Removes a product and saves the new selection*/
         removeProduct(overview->searchText, overview);
@@ -45,11 +64,28 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
         overview->searchTextLength++;
     }
     
-    /*TODO: Handle the time of day*/
+    /*Handle the time of day*/
+    updateTime(overview);
+    int minutesSinceStart = (overview->hour - overview->startHour)*60 + (overview->minute - overview->startMinute);
+    if(minutesSinceStart <= 0) {
+        overview->nextHour = overview->startHour;
+        overview->nextMinute = overview->startMinute;
+    } else {
+        for(int i = 0; i < minutesSinceStart; i += overview->minutesBetweenUpdates) {
+            
+        }
+    }
 }
 void drawOverview(Overview *overview) {
     /*Draws temporary search box*/
-    printf("Search: %s", overview->searchText);
+    printf("Date: %02d/%02d/%d     Time: %02d:%02d:%02d    %cStart: %02d:%02d:00     Next: %02d:%02d:00    %cSearch: %s", 
+        overview->day, overview->month, overview->year,
+        overview->hour, overview->minute, overview->second, 
+        overview->state == ChangingTime ? '>' : ' ',
+        overview->startHour, overview->startMinute,
+        overview->nextHour, overview->nextMinute,
+        overview->state == Searching ? '>' : ' ',
+        overview->searchText);
     /*Draws the variable lables*/
     overviewUI();
     /*Draws a list of the first n products*/
@@ -62,7 +98,7 @@ void drawProducts(Overview *overview) {
     for(i = 0; i < overview->productAmount && y < ((38 - 7) / 3); i++) {
         Product *currentProduct = (overview->products+i);
         /* If searchText is equal to a substring of the name of the product, draw it */
-        if(strstr(currentProduct->name, overview->searchText)) {
+        if(strstr(strToLower(currentProduct->name), strToLower(overview->searchText))) {
             y++;
             listItem(4 + y * 3, y, currentProduct->name, currentProduct->currentAmount, 
                 currentProduct->startPrice, currentProduct->currentPrice, currentProduct->amountDecrement);
@@ -79,7 +115,7 @@ void removeProduct(char *name, Overview *overview) {
     int found = 0;
     for(int i = 0; i < overview->productAmount; i++) {
         /* If the product has the same name as what should be removed, mark it as found */
-        if(!strcmp(overview->products[i].name, name)) {
+        if(!strcmp(strToLower(overview->products[i].name), strToLower(name))) {
             found = 1;
         }
         /* If the product has been found, move the proceding products one step down over the product that should be removed */
@@ -95,4 +131,31 @@ void removeProduct(char *name, Overview *overview) {
     if(found) {
         overview->productAmount--;
     }
+}
+
+void updateTime(Overview *overview) {
+    long int seconds;
+    time(&seconds);
+    struct tm *time = localtime(&seconds);
+    overview->second = time->tm_sec;
+    overview->minute = time->tm_min;
+    overview->hour   = time->tm_hour;
+    
+    overview->day = time->tm_mday;
+    overview->month = 1+time->tm_mon;
+    overview->year = 1900+time->tm_year;
+}
+
+char *strToLower(char *str) {
+    char *strTemp = (char *) malloc((strlen(str)) * sizeof(char));
+    int i;
+    for(i = 0; i < strlen(str); i++) {
+        if(str[i] != '\0') {
+            strTemp[i] = tolower(str[i]);
+        } else {
+            strTemp[i] = str[i];
+        }
+    }
+    strTemp[i] = '\0';
+    return strTemp;
 }

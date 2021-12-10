@@ -13,9 +13,5 @@ void saveProducts(Product *products, int *productAmount);
 
 int countLinesInFile(FILE *f);
 
-/*void loadGlobals(int *globals, int globalAmount, FILE *file) {
-
-}
-void saveGlobals(int *globals, int globalAmount, FILE *file) {
-
-}*/
+void saveStartTime(int startHour, int startMinute);
+void loadStartTime(int *startHour, int *startMinute);

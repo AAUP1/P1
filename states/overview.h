@@ -7,11 +7,18 @@
 
 #ifndef OVERVIEW_DEFINED
 #define OVERVIEW_DEFINED
+enum OverviewState { Searching, ChangingTime };
+typedef enum OverviewState OverviewState;
 struct Overview {
     Product products[MAX_PRODUCT_AMOUNT];
     char searchText[MAX_TEXT_LENGTH];
     int searchTextLength;
     int productAmount;
+    int startHour, startMinute;
+    int nextHour, nextMinute;
+    int minutesBetweenUpdates;
+    int year, month, day, hour, minute, second;
+    OverviewState state;
 };
 typedef struct Overview Overview;
 #endif
@@ -24,3 +31,7 @@ void drawProducts(Overview *overview);
 
 void addProduct(Overview* overview);
 void removeProduct(char *name, Overview *overview);
+
+void updateTime(Overview *overview);
+
+char *strToLower(char *str);
