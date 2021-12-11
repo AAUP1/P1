@@ -5,24 +5,32 @@
 //#include "overview.h"
 #include <stdio.h>
 #include "../loadSave.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+
 int editingproduct = 0;
-char chartest[32];
+//char chartest[32];
+
+
 void initEditView(EditView *editView) {
 
 }
-void updateEditView(EditView *editView, StateType *currentState, Overview *overview, int input, Product *Product) {
+void updateEditView(EditView *editView, StateType *currentState, Overview *overview, int input, Product *product) {
     
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
-        if(overview->searchTextLength >= 1){
+        if(overview->searchTextLength >= 1 || editingproduct == 1){
             if(editingproduct == 1){
-                Product->nameLength--;
-                Product->tempName[Product->nameLength] = '\0';
+                product->nameLength--;
+                product->tempName[product->nameLength] = '\0';
             } else{
                 overview->searchTextLength--;
                 overview->searchText[overview->searchTextLength] = '\0';
             }            
-        } else {
+        } else if(editingproduct == 0) {
             *currentState = MENU;
         }
     }
@@ -31,8 +39,9 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
     } else if(input == DOWN) {
 
     } else if(input == LEFT) {
-        
+        editingproduct = 1;
     } else if(input == RIGHT) {
+        clearTName(product);
         editingproduct = 0;
     } else if(input == ENTER){
         if(overview->searchTextLength >= 1){
@@ -42,9 +51,9 @@ void updateEditView(EditView *editView, StateType *currentState, Overview *overv
     }else {
         
         if(editingproduct == 1){
-            Product->tempName[Product->nameLength] = input;
-            Product->tempName[Product->nameLength+1] = '\0';
-            Product->nameLength++;
+            product->tempName[product->nameLength] = input;
+            product->tempName[product->nameLength+1] = '\0';
+            product->nameLength++;
         } else {
             /*Adds a character to the searchText*/
             overview->searchText[overview->searchTextLength] = input;
@@ -64,8 +73,19 @@ void drawEditView(EditView *editView, Overview *overview, Product *product) {
     /*Draws a list of the first n products*/
     drawProducts(overview);
     if(editingproduct == 1){
-
-        ConsolePlacement(4, 8);
-        printf("%s", product->tempName);        
+        editingMode(editView, overview, product);
+               
     }    
+}
+void editingMode(EditView *editView, Overview *overview, Product *product){
+    ConsolePlacement(4, 8);
+    printf("%s", product->tempName);
+    
+
+}
+void clearTName(Product *product){
+    while(product->nameLength >= 1){
+        product->nameLength--;
+        product->tempName[product->nameLength] = '\0';
+    }
 }

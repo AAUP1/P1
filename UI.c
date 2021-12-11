@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <windows.h>
 
+#define SCREENWIDTH 112
+
 // makes a menu button: drawBox("text in center", 1/0);
 void drawBox(char* str, int isactive, int x, int y){
     //takes the lengh of the input and uses it    
@@ -53,12 +55,12 @@ void drawBox(char* str, int isactive, int x, int y){
 
 //draws a line across the screen!
 void line(char c){
-    for(int i = 0; i < 112; i++){
+    for(int i = 0; i < SCREENWIDTH; i++){
         wprintf(L"%c", c);
     }
     printf("\n");
 }
-void listItem(int y, int index, char *name, int amount, int startPrice, int livePrice, int decrement) {
+void listItem(int y, int index, char *name, int amount, int amountLeft, int startPrice, int livePrice, int decrement) {
     ConsolePlacement(0, y);
     line('-');
     //digit
@@ -68,7 +70,7 @@ void listItem(int y, int index, char *name, int amount, int startPrice, int live
     printf("%s", name);
     // Amount
     ConsolePlacement(20, y + 1);
-    printf("%d", amount);
+    printf("%d/%d", amountLeft, amount);
     // Start price
     ConsolePlacement(50, y + 1);
     printf("%d", startPrice);
@@ -77,7 +79,7 @@ void listItem(int y, int index, char *name, int amount, int startPrice, int live
     printf("%d", livePrice);
     // Decriment
     ConsolePlacement(103, y + 1);
-    printf("%% %d", decrement);
+    printf("%d%%", decrement);
     printf("\n");
     line('-');
 }

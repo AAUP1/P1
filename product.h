@@ -4,6 +4,7 @@
 struct Product {
     char* name;
     char tempName[MAX_NAME_LENGTH];
+    char* test;
     int tempnum;
     int nameLength;
     int startAmount;

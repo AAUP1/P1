@@ -24,12 +24,12 @@ typedef struct Overview Overview;
 #endif
 
 void initOverview(Overview* overview);
-void updateOverview(Overview* overview, StateType *currentState, int input);
+void updateOverview(Overview* overview, StateType *currentState, int input, Product *product);
 void drawOverview(Overview* overview);
 
 void drawProducts(Overview *overview);
 
-void addProduct(Overview* overview);
+void addProduct(Overview* overview, char* newname, int startAmount, int currentAmount, int startPrice, int currentPrice, int amountDecrement);
 void removeProduct(char *name, Overview *overview);
 
 void updateTime(Overview *overview);

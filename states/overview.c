@@ -25,7 +25,8 @@ void initOverview(Overview *overview) {
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
 }
-void updateOverview(Overview *overview, StateType* currentState, int input) {
+void updateOverview(Overview *overview, StateType* currentState, int input, Product *product) {
+    product->test = "Dont";
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
         if(overview->searchTextLength >= 1){
@@ -41,7 +42,7 @@ void updateOverview(Overview *overview, StateType* currentState, int input) {
             saveStartTime(overview->startHour, overview->startMinute);
         } else {
             /*Adds a product and saves the new selection*/
-            addProduct(overview);
+            addProduct(overview, product->test, 500, 200, 100, 99, 1);
             saveProducts(overview->products, &(overview->productAmount));
         }
     } else if(input == DOWN) {
@@ -100,15 +101,21 @@ void drawProducts(Overview *overview) {
         /* If searchText is equal to a substring of the name of the product, draw it */
         if(strstr(strToLower(currentProduct->name), strToLower(overview->searchText))) {
             y++;
-            listItem(4 + y * 3, y, currentProduct->name, currentProduct->currentAmount, 
+            listItem(4 + y * 3, y, currentProduct->name, currentProduct->startAmount, currentProduct->currentAmount, 
                 currentProduct->startPrice, currentProduct->currentPrice, currentProduct->amountDecrement);
         }
     }
 }
 
-void addProduct(Overview* overview) {
+void addProduct(Overview* overview, char* newname, int startAmount, int currentAmount, int startPrice, int currentPrice, int amountDecrement) {
     Product *newProduct = &((overview->products)[overview->productAmount]);
-    newProduct->name = "Dont";
+    newProduct->name = newname;
+    newProduct->startAmount = startAmount;
+    newProduct->currentAmount = currentAmount;
+    newProduct->startPrice = startPrice;
+    newProduct->currentPrice = currentPrice;
+    newProduct->amountDecrement = amountDecrement;
+
     overview->productAmount++;
 }
 void removeProduct(char *name, Overview *overview) {

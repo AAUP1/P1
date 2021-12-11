@@ -92,7 +92,7 @@ void updateState(int state, int input) {
             updateMenu(&menu, &currentState, &programRunning, input);
             break;
         case OVERVIEW:
-            updateOverview(&overview, &currentState, input);
+            updateOverview(&overview, &currentState, input, &product);
             break;
         case EDIT:
             updateEditView(&editView, &currentState, &overview, input, &product);
