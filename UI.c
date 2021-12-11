@@ -63,7 +63,7 @@ void listItem(int y, int index, Product *product) {
     ConsolePlacement(0, y);
     line('-');
     //digit
-    printf("%d.", index);
+    printf("%32d.", index);
     // product name
     ConsolePlacement(4, y + 1);
     printf("%s", product->name);

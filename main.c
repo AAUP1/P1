@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+//used for live input
 #include <conio.h>
+
 //used for strings.
 #include <string.h>
 
 // wchar needed for wprint too show different symbols.
 #include <wchar.h>
+// ^is this one even used?
 
 //used for clearing the screen!
 #include <unistd.h>
@@ -82,6 +85,7 @@ void initStates() {
 }
 
 /* Updates a state with an input parameter */
+/* function that controls what keys do what */
 void updateState(int state, int input) {
     switch(state) {
         case MENU:

@@ -12,6 +12,7 @@ void loadProducts(Product *products, int *productAmount) {
         fscanf(file, " %d", productAmount);
         /* Scans for all the variables in all the products and saves them to a product array */
         for(i = 0; i < *productAmount; i++) {
+            //possible memory leak? free malloc?
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
             int startAmount, currentAmount, amountDecrement, startPrice, currentPrice, priceDecrement;
             fscanf(file, " %s %d %d %d %d %d %d", name, &startAmount, &currentAmount, &amountDecrement, &startPrice, &currentPrice, &priceDecrement);
@@ -45,7 +46,7 @@ void saveProducts(Product *products, int *productAmount) {
     }
     fclose(file);
 }
-
+//where is this one used?
 int countLinesInFile(FILE *f) {
     char currentChar = '\n';
     int lines = 0;
@@ -57,7 +58,7 @@ int countLinesInFile(FILE *f) {
     }
     return lines;
 }
-
+//this one doesnt seem to be used?
 void productToString(Product product) {
     printf("PRODUCT [Name: %s, StartAmount: %d, CurrentAmount: %d, AmountDecrement: %d, StartPrice: %d, CurrentPrice: %d, PriceDecrement: %d \n", 
             product.name, product.startAmount, product.currentAmount, product.amountDecrement,
