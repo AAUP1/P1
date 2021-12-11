@@ -29,6 +29,7 @@ void updateOverview(Overview* overview, StateType *currentState, int input);
 void drawOverview(Overview* overview);
 
 void drawProducts(Overview *overview);
+void compareProducts(void *p_product1, void *p_product2);
 
 void addProduct(Overview* overview);
 void removeProduct(char *name, Overview *overview);

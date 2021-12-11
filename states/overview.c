@@ -229,4 +229,16 @@ char *strToLower(char *str) {
     return strTemp;
 }
 
+void compareProducts(void *p_product1, void *p_product2) {
+    Product *product1, *product2;
+    int i, p1NameLength, p2NameLength;
+    product1 = (Product *) p_product1;
+    product2 = (Product *) p_product2;
+    p1NameLength = strlen(product1->name);
+    p2NameLength = strlen(product2->name);
+    /*for(i = 0; i < min(p1NameLength, p2NameLength); i++) {
+
+    }*/
+}
+
 /*KNOWN ISSUE: The resetting and loading of products does not work correctly*/
