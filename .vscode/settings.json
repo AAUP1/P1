@@ -3,6 +3,9 @@
     "files.associations": {
         "editview.h": "c",
         "overview.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "limits": "c",
+        "*.tcc": "c",
+        "math.h": "c"
     }
 }

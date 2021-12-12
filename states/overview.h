@@ -29,7 +29,7 @@ void updateOverview(Overview* overview, StateType *currentState, int input);
 void drawOverview(Overview* overview);
 
 void drawProducts(Overview *overview);
-void compareProducts(void *p_product1, void *p_product2);
+int compareProducts(const void *p_product1, const void *p_product2);
 
 void addProduct(Overview* overview);
 void removeProduct(char *name, Overview *overview);
@@ -41,4 +41,7 @@ void setNextTime(Overview *overview);
 void updateTime(Overview *overview);
 void resetTime(Overview *overview);
 
-char *strToLower(char *str);
+int lowercaseStrstr(char *str1, char *str2);
+int lowercaseStrcmp(char *str1, char *str2);
+int compareLetters(char letter, char otherLetter);
+int compareStrings(char *str, char *otherStr);

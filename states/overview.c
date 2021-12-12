@@ -22,6 +22,7 @@ void initOverview(Overview *overview) {
     overview->minutesBetweenUpdates = 120;
 
     loadProducts(overview->products, &overview->productAmount);
+    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
 
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
@@ -111,7 +112,7 @@ void drawProducts(Overview *overview) {
     for(i = 0; i < overview->productAmount && y < ((38 - 7) / 3); i++) {
         Product *currentProduct = (overview->products+i);
         /* If searchText is equal to a substring of the name of the product, draw it */
-        if(strstr(strToLower(currentProduct->name), strToLower(overview->searchText))) {
+        if(lowercaseStrstr(currentProduct->name, overview->searchText)) {
             y++;
             listItem(4 + y * 3, y, currentProduct);
         }
@@ -129,12 +130,13 @@ void addProduct(Overview* overview) {
     resetProduct(*newProduct);
 
     overview->productAmount++;
+    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
 }
 void removeProduct(char *name, Overview *overview) {
     int found = 0;
     for(int i = 0; i < overview->productAmount; i++) {
         /* If the product has the same name as what should be removed, mark it as found */
-        if(!strcmp(strToLower(overview->products[i].name), strToLower(name))) {
+        if(!lowercaseStrcmp(overview->products[i].name, name)) {
             found = 1;
         }
         /* If the product has been found, move the proceding products one step down over the product that should be removed */
@@ -215,30 +217,52 @@ void setNextTime(Overview *overview) {
     }
 }
 
-char *strToLower(char *str) {
-    char *strTemp = (char *) malloc((strlen(str)) * sizeof(char));
-    int i;
-    for(i = 0; i < strlen(str); i++) {
-        if(str[i] != '\0') {
-            strTemp[i] = tolower(str[i]);
-        } else {
-            strTemp[i] = str[i];
+int lowercaseStrcmp(char *str1, char *str2) {
+    char str1Low[MAX_NAME_LENGTH];
+    char str2Low[MAX_NAME_LENGTH];
+    int i; 
+    for(i = 0; i <= strlen(str1); i++) {
+        str1Low[i] = tolower(str1[i]);
+    }
+    for(i = 0; i <= strlen(str2); i++) {
+        str2Low[i] = tolower(str2[i]);
+    }
+    return strcmp(str1Low, str2Low);
+}
+int lowercaseStrstr(char *str1, char *str2) {
+    char str1Low[MAX_NAME_LENGTH];
+    char str2Low[MAX_NAME_LENGTH];
+    int i; 
+    for(i = 0; i <= strlen(str1); i++) {
+        str1Low[i] = tolower(str1[i]);
+    }
+    for(i = 0; i <= strlen(str2); i++) {
+        str2Low[i] = tolower(str2[i]);
+    }
+    return strstr(str1Low, str2Low) != NULL;
+}
+int compareLetters(char letter, char otherLetter) {
+    return tolower(letter) - tolower(otherLetter);
+}
+int compareStrings(char *str, char *otherStr) {
+    int strLength = strlen(str);
+    int otherStrLength = strlen(otherStr);
+    int shortestLength = strLength < otherStrLength ? strLength : otherStrLength;
+    int letterResult = 0;
+    for(int i = 0; i < shortestLength; i++) {
+        letterResult = compareLetters(str[i], otherStr[i]);
+        if(letterResult != 0) {
+            return letterResult;
         }
     }
-    strTemp[i] = '\0';
-    return strTemp;
+    return strLength - otherStrLength;
 }
 
-void compareProducts(void *p_product1, void *p_product2) {
+int compareProducts(const void *p_product1,  const void *p_product2) {
     Product *product1, *product2;
-    int i, p1NameLength, p2NameLength;
     product1 = (Product *) p_product1;
     product2 = (Product *) p_product2;
-    p1NameLength = strlen(product1->name);
-    p2NameLength = strlen(product2->name);
-    /*for(i = 0; i < min(p1NameLength, p2NameLength); i++) {
-
-    }*/
+    return compareStrings(product1->name, product2->name);
 }
 
 /*KNOWN ISSUE: The resetting and loading of products does not work correctly*/
