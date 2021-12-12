@@ -27,7 +27,7 @@ void initOverview(Overview *overview) {
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
     
-    updateProducts(overview);
+    resetProducts(overview->products, overview->productAmount);
 
     srand(time(NULL));
 }
@@ -126,7 +126,7 @@ void drawProducts(Overview *overview) {
 
 void addProduct(Overview* overview, char* newname, int startAmount, int startPrice, int expectedDelta, int priceDelta) {
     Product *newProduct = &((overview->products)[overview->productAmount]);
-    newProduct->name = newname;
+    strcpy(newProduct->name, newname);
     newProduct->startAmount = startAmount;
     newProduct->expectedDelta = expectedDelta;
     newProduct->startPrice = startPrice;

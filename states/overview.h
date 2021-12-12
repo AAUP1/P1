@@ -11,9 +11,9 @@
 enum OverviewState { Searching, ChangingTime };
 typedef enum OverviewState OverviewState;
 struct Overview {
-    Product products[MAX_PRODUCT_AMOUNT];
     char searchText[MAX_TEXT_LENGTH];
     int searchTextLength;
+    Product products[MAX_PRODUCT_AMOUNT];
     int productAmount;
     /* The time unit is in seconds. There are functions to convert this to hours, minutes and such */
     long int currentTime, timeOffset, startUpdatingTime, lastUpdateTime, nextUpdateTime, timeBetweenUpdates;

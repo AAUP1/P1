@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "loadSave.h"
 
@@ -12,11 +13,10 @@ void loadProducts(Product *products, int *productAmount) {
         fscanf(file, " %d", productAmount);
         /* Scans for all the variables in all the products and saves them to a product array */
         for(i = 0; i < *productAmount; i++) {
-            //possible memory leak? free malloc?
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
             int startAmount, expectedDelta, startPrice, priceDelta, currentAmount, expectedModifier, priceModifier;
             fscanf(file, " %s %d %d %d %d %d %d %d", name, &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
-            products[i].name = name;
+            strcpy(products[i].name, name);
             products[i].startAmount = startAmount;
             products[i].expectedDelta = expectedDelta;
             products[i].startPrice = startPrice;
@@ -24,6 +24,7 @@ void loadProducts(Product *products, int *productAmount) {
             products[i].currentAmount = currentAmount;
             products[i].expectedModifier = expectedModifier;
             products[i].priceModifier = priceModifier;
+            free(name);
         }
         fclose(file);
     } else {
