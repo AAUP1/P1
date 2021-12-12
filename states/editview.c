@@ -76,15 +76,27 @@ void drawEditView(EditView *editView, Overview *overview, Product *product) {
     ConsolePlacement(20, 0);
     printf("Search: %s", overview->searchText);
     /*Draws the variable lables*/
-    overviewUI();
+    editviewUI();
     /*Draws a list of the first n products*/
-    drawProducts(overview);
+    drawEditProducts(overview);
     ConsolePlacement(0, 0);
     printf("check: %i", editingproduct);
     if(editingproduct >= 1){
         editingMode(editView, overview, product);
                
     }    
+}
+void drawEditProducts(Overview *overview) {
+    int i, y = 0;
+    /* Cycles through all products */
+    for(i = 0; i < overview->productAmount && y < ((38 - 7) / 3); i++) {
+        Product *currentProduct = (overview->products+i);
+        /* If searchText is equal to a substring of the name of the product, draw it */
+        if(lowercaseStrstr(currentProduct->name, overview->searchText)) {
+            y++;
+            editListItem(4 + y * 3, y, currentProduct);
+        }
+    }
 }
 void editingMode(EditView *editView, Overview *overview, Product *product){
     
@@ -116,4 +128,16 @@ void clearTName(Product *product){
         product->numLength--;
         product->tempnum[product->numLength] = '\0';
     }
+}
+
+
+Product *findProduct(char *name, Product *products, int productAmount) {
+    int i;
+    for(i = 0; i < productAmount; i++) {
+        /* If searchText is equal to a substring of the name of the product, return it */
+        if(lowercaseStrstr(products[i].name, name)) {
+            return &products[i];
+        }
+    }
+    return NULL;
 }

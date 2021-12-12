@@ -14,17 +14,16 @@ void loadProducts(Product *products, int *productAmount) {
         for(i = 0; i < *productAmount; i++) {
             //possible memory leak? free malloc?
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
-            int startAmount, currentAmount, amountDecrement, startPrice, currentPrice, priceDecrement;
-            fscanf(file, " %s %d %d %d %d %d %d", name, &startAmount, &currentAmount, &amountDecrement, &startPrice, &currentPrice, &priceDecrement);
+            int startAmount, expectedDelta, startPrice, priceDelta, currentAmount, expectedModifier, priceModifier;
+            fscanf(file, " %s %d %d %d %d %d %d %d", name, &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
             products[i].name = name;
             products[i].startAmount = startAmount;
-            products[i].currentAmount = currentAmount;
-            products[i].amountDecrement = amountDecrement;
+            products[i].expectedDelta = expectedDelta;
             products[i].startPrice = startPrice;
-            products[i].currentPrice = currentPrice;
-            products[i].priceDecrement = priceDecrement;
-
-            products[i].expectedAmount = startAmount;
+            products[i].priceDelta = priceDelta;
+            products[i].currentAmount = currentAmount;
+            products[i].expectedModifier = expectedModifier;
+            products[i].priceModifier = priceModifier;
         }
         fclose(file);
     } else {
@@ -39,10 +38,10 @@ void saveProducts(Product *products, int *productAmount) {
     fprintf(file, "%d \n", *productAmount);
     /* Saves the new product variables to the file */
     for(i = 0; i < *productAmount; i++) {
-        fprintf(file, "%s %d %d %d %d %d %d \n", 
+        fprintf(file, "%s %d %d %d %d %d %d %d \n", 
             products[i].name, 
-            products[i].startAmount, products[i].currentAmount, products[i].amountDecrement, 
-            products[i].startPrice, products[i].currentPrice, products[i].priceDecrement);
+            products[i].startAmount, products[i].expectedDelta, products[i].startPrice, 
+            products[i].priceDelta, products[i].currentAmount, products[i].expectedModifier, products[i].priceModifier);
     }
     fclose(file);
 }
@@ -58,22 +57,22 @@ int countLinesInFile(FILE *f) {
     }
     return lines;
 }
-//this one doesnt seem to be used?
+/*//this one doesnt seem to be used? MURDER IT!!!!
 void productToString(Product product) {
     printf("PRODUCT [Name: %s, StartAmount: %d, CurrentAmount: %d, AmountDecrement: %d, StartPrice: %d, CurrentPrice: %d, PriceDecrement: %d \n", 
             product.name, product.startAmount, product.currentAmount, product.amountDecrement,
             product.startPrice, product.currentAmount, product.priceDecrement);
-}
+}*/
 
-void saveStartTime(int startHour, int startMinute) {
+void saveStartTime(long int startUpdatingTime) {
     FILE *file;
     file = fopen("startTime.txt", "w");
-    fprintf(file, "%d:%d", startHour, startMinute);
+    fprintf(file, "%d", startUpdatingTime);
     fclose(file);
 }
-void loadStartTime(int *startHour, int *startMinute) {
+void loadStartTime(long int *startUpdatingTime) {
     FILE *file;
     file = fopen("startTime.txt", "r");
-    fscanf(file, "%d:%d", startHour, startMinute);
+    fscanf(file, "%d", startUpdatingTime);
     fclose(file);
 }

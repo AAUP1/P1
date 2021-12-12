@@ -4,6 +4,7 @@
 
 #define MAX_PRODUCT_AMOUNT 128
 #define MAX_TEXT_LENGTH 32
+#define LENGTH_OF_DAY (60*60*24)
 
 #ifndef OVERVIEW_DEFINED
 #define OVERVIEW_DEFINED
@@ -14,11 +15,8 @@ struct Overview {
     char searchText[MAX_TEXT_LENGTH];
     int searchTextLength;
     int productAmount;
-    int startHour, startMinute;
-    int nextHour, nextMinute;
-    int lastHour, lastMinute;
-    int minutesBetweenUpdates, timeSkipped;
-    int year, month, day, hour, minute, second;
+    /* The time unit is in seconds. There are functions to convert this to hours, minutes and such */
+    long int currentTime, timeOffset, startUpdatingTime, lastUpdateTime, nextUpdateTime, timeBetweenUpdates;
     OverviewState state;
 };
 typedef struct Overview Overview;
@@ -30,12 +28,14 @@ void drawOverview(Overview* overview);
 
 void drawProducts(Overview *overview);
 int compareProducts(const void *p_product1, const void *p_product2);
-
-void addProduct(Overview* overview, char* newname, int startAmount, int currentAmount, int startPrice, int currentPrice, int amountDecrement);
+void addProduct(Overview* overview, char* newname, int startAmount, int startPrice, int expectedDelta, int priceDelta);
 void removeProduct(char *name, Overview *overview);
+void updateProducts(Overview *overview);
+
 void resetProducts(Product *products, int productAmount);
-void resetProduct(Product product);
 void iterateProductPrices(Product *products, int productAmount);
+int getCurrentProductPrice(Product *product);
+int getExpectedProductAmount(Product *product);
 
 void setNextTime(Overview *overview);
 void updateTime(Overview *overview);

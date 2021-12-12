@@ -17,20 +17,21 @@ void initOverview(Overview *overview) {
     overview->state = Searching;
 
     updateTime(overview);
-    loadStartTime(&(overview->startHour), &(overview->startMinute));
+    loadStartTime(&(overview->startUpdatingTime));
     resetTime(overview);
-    overview->minutesBetweenUpdates = 120;
+    overview->timeBetweenUpdates = 120*60;
 
     loadProducts(overview->products, &overview->productAmount);
     qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
 
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
+    
+    updateProducts(overview);
 
     srand(time(NULL));
 }
 void updateOverview(Overview *overview, StateType* currentState, int input, Product *product) {
-    product->test = "Dont";
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
         if(overview->searchTextLength >= 1){
@@ -42,17 +43,17 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
         
     } else if(input == UP) {
         if(overview->state == ChangingTime) {
-            overview->startHour++;
-            saveStartTime(overview->startHour, overview->startMinute);
+            overview->startUpdatingTime += 60*60;
+            saveStartTime(overview->startUpdatingTime);
         } else {
             /*Adds a product and saves the new selection*/
-            addProduct(overview, product->test, 500, 200, 100, 99, 1);
+            addProduct(overview, "Henlo", 420, 69, 20, 10);
             saveProducts(overview->products, &(overview->productAmount));
         }
     } else if(input == DOWN) {
         if(overview->state == ChangingTime) {
-            overview->startHour--;
-            saveStartTime(overview->startHour, overview->startMinute);
+            overview->startUpdatingTime -= 60*60;
+            saveStartTime(overview->startUpdatingTime);
         }
     } else if(input == LEFT) {
         overview->state = ChangingTime;
@@ -63,18 +64,18 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
         removeProduct(overview->searchText, overview);
         saveProducts(overview->products, &(overview->productAmount));
     } else if(input == PAGE_UP) {
-        overview->timeSkipped += 20 * 60;
+        overview->timeOffset += 20 * 60;
         for(int i = 0; i < overview->productAmount; i++) {
             overview->products[i].currentAmount -= rand() % 10;
             if(overview->products[i].currentAmount < 0) {
                 overview->products[i].currentAmount = 0;
             }
         }
-    } else if(input == PAGE_DOWN) {
-        overview->timeSkipped -= 20 * 60;
     } else if(input == HOME) {
         resetTime(overview);
         resetProducts(overview->products, overview->productAmount);
+    } else if(input == END) {
+        
     } else {
         /*Adds a character to the searchText*/
         overview->searchText[overview->searchTextLength] = input;
@@ -84,21 +85,24 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
     
     /*Handle the time of day*/
     updateTime(overview);
-    if(overview->hour > overview->nextHour || (overview->hour == overview->nextHour && overview->minute > overview->nextMinute)) {
-        setNextTime(overview);
-        iterateProductPrices(overview->products, overview->productAmount);   
-    }
+    updateProducts(overview);
     
     
 }
 void drawOverview(Overview *overview) {
+    struct tm *time = localtime(&overview->currentTime);
     /*Draws temporary search box*/
-    printf("Date: %02d/%02d/%d     Time: %02d:%02d:%02d    %cStart: %02d:%02d:00     Next: %02d:%02d:00    %cSearch: %s", 
-        overview->day, overview->month, overview->year,
-        overview->hour, overview->minute, overview->second, 
+    printf("Date: %02d/%02d/%d     Time: %02d:%02d:%02d    ", 
+        time->tm_mday, time->tm_mon, 1900+time->tm_year,
+        time->tm_hour, time->tm_min, time->tm_sec);
+    time = localtime(&overview->startUpdatingTime);
+    printf("%cStart: %02d:%02d:00     ", 
         overview->state == ChangingTime ? '>' : ' ',
-        overview->startHour, overview->startMinute,
-        overview->nextHour, overview->nextMinute,
+        time->tm_hour, time->tm_min);
+    time = localtime(&overview->nextUpdateTime);
+    printf("Next: %02d:%02d:00    ", 
+        time->tm_hour, time->tm_min);
+    printf("%cSearch: %s", 
         overview->state == Searching ? '>' : ' ',
         overview->searchText);
     /*Draws the variable lables*/
@@ -120,14 +124,13 @@ void drawProducts(Overview *overview) {
     }
 }
 
-void addProduct(Overview* overview, char* newname, int startAmount, int currentAmount, int startPrice, int currentPrice, int amountDecrement) {
+void addProduct(Overview* overview, char* newname, int startAmount, int startPrice, int expectedDelta, int priceDelta) {
     Product *newProduct = &((overview->products)[overview->productAmount]);
     newProduct->name = newname;
     newProduct->startAmount = startAmount;
-    newProduct->currentAmount = currentAmount;
+    newProduct->expectedDelta = expectedDelta;
     newProduct->startPrice = startPrice;
-    newProduct->currentPrice = currentPrice;
-    newProduct->amountDecrement = amountDecrement;
+    newProduct->priceDelta = priceDelta;
 
     overview->productAmount++;
     qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
@@ -153,68 +156,60 @@ void removeProduct(char *name, Overview *overview) {
         overview->productAmount--;
     }
 }
-void resetProducts(Product *products, int productAmount) {
-    for(int i = 0; i < productAmount; i++) {
-        resetProduct(products[i]);
+void updateProducts(Overview *overview) {
+    if(overview->currentTime%LENGTH_OF_DAY >= overview->nextUpdateTime%LENGTH_OF_DAY) {
+        iterateProductPrices(overview->products, overview->productAmount);
+        setNextTime(overview);
     }
-}
-void resetProduct(Product product) {
-    product.currentAmount = product.startAmount;
-    product.currentPrice = product.startPrice;
-    product.expectedAmount = product.startAmount;
-    product.currentPriceDecrement = 0;
-    product.currentAmountDecrement = 0;
-}
-void iterateProductPrices(Product *products, int productAmount) {
-    for(int i = 0; i < productAmount; i++) {
-            Product *product = &(products[i]);
-            product->currentAmountDecrement += product->amountDecrement;
-            if(product->currentAmountDecrement > 100) {
-                product->currentAmountDecrement = 100;
-            }
-            product->expectedAmount = product->startAmount - (product->startAmount * product->currentAmountDecrement / 100.0);
-            if(product->currentAmount > product->expectedAmount) {
-                product->currentPriceDecrement += product->priceDecrement;
-                if(product->currentPriceDecrement > 100) {
-                    product->currentPriceDecrement = 100;
-                }
-                product->currentPrice = product->startPrice - (product->startPrice * product->currentPriceDecrement / 100.0);
-            }
-        } 
 }
 
 void updateTime(Overview *overview) {
-    long int seconds;
-    time(&seconds);
-    seconds += overview->timeSkipped;
-    struct tm *time = localtime(&seconds);
-    overview->second = time->tm_sec;
-    overview->minute = time->tm_min;
-    overview->hour   = time->tm_hour;
-    
-    overview->day = time->tm_mday;
-    overview->month = 1+time->tm_mon;
-    overview->year = 1900+time->tm_year;
+    time(&overview->currentTime);
+    overview->currentTime = 1639288800; //Svarer til d. 12. december 2021 kl. 7:00
+    overview->currentTime += overview->timeOffset;
+    while(overview->currentTime%LENGTH_OF_DAY + overview->timeBetweenUpdates < overview->nextUpdateTime%LENGTH_OF_DAY) {
+        overview->nextUpdateTime -= overview->timeBetweenUpdates;
+    }
+    if(overview->nextUpdateTime%LENGTH_OF_DAY < overview->startUpdatingTime%LENGTH_OF_DAY) {
+        overview->nextUpdateTime = overview->startUpdatingTime;
+    }
 }
 void resetTime(Overview *overview) {
-    overview->nextHour = overview->startHour;
-    overview->nextMinute = overview->startMinute;
-    overview->lastHour = 0;
-    overview->lastMinute = 0; 
-    overview->timeSkipped = 0;
+    overview->nextUpdateTime = overview->startUpdatingTime;
+    overview->lastUpdateTime = 0;
+    overview->timeOffset = 0;
 }
 void setNextTime(Overview *overview) {
-    overview->lastHour = overview->nextHour;
-    overview->lastMinute = overview->nextMinute;
-    overview->nextHour += overview->minutesBetweenUpdates/60;
-    overview->nextMinute += overview->minutesBetweenUpdates%60;
-    if(overview->nextMinute >= 60) {
-        overview->nextHour++;
-        overview->nextMinute -= 60;
+    overview->lastUpdateTime = overview->nextUpdateTime;
+    overview->nextUpdateTime += overview->timeBetweenUpdates;
+}
+
+void resetProducts(Product *products, int productAmount) {
+    for(int i = 0; i < productAmount; i++) {
+        products[i].currentAmount = products[i].startAmount;
+        products[i].expectedModifier = 100;
+        products[i].priceModifier = 100;  
     }
-    if(overview->nextHour >= 24) {
-        overview->nextHour -= 24;
+}  
+void iterateProductPrices(Product *products, int productAmount) {
+    for(int i = 0; i < productAmount; i++) {
+        products[i].expectedModifier -= products[i].expectedDelta;
+        if(products[i].expectedModifier < 0) {
+            products[i].expectedModifier = 0;
+        }
+        if(products[i].currentAmount > getExpectedProductAmount(&products[i])) {
+            products[i].priceModifier -= products[i].priceDelta;
+            if(products[i].priceModifier < 0) {
+                products[i].priceModifier = 0;
+            }
+        }
     }
+}
+int getCurrentProductPrice(Product *product) {
+    return (product->startPrice * product->priceModifier) / 100;
+}
+int getExpectedProductAmount(Product *product) {
+    return (product->startAmount * product->expectedModifier) / 100;
 }
 
 int lowercaseStrcmp(char *str1, char *str2) {
@@ -264,5 +259,3 @@ int compareProducts(const void *p_product1,  const void *p_product2) {
     product2 = (Product *) p_product2;
     return compareStrings(product1->name, product2->name);
 }
-
-/*KNOWN ISSUE: The resetting and loading of products does not work correctly*/

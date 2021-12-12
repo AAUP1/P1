@@ -1,6 +1,7 @@
 #include "UI.h"
 #include "terminal.h"
 #include "product.h"
+#include "states/overview.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -65,25 +66,50 @@ void listItem(int y, int index, Product *product) {
     ConsolePlacement(0, y);
     line('-');
     //digit
-    printf("%32d.", index);
+    printf("%d.", index);
     // product name
     ConsolePlacement(4, y + 1);
     printf("%s", product->name);
     // Amount
     ConsolePlacement(20, y + 1);
-    printf("%d [%d]", product->currentAmount, product->expectedAmount);
+    printf("%d [%d]", product->currentAmount, getExpectedProductAmount(product));
     // Start price
     ConsolePlacement(50, y + 1);
     printf("%d", product->startPrice);
     // Live price
     ConsolePlacement(75, y + 1);
-    printf("%d", product->currentPrice);
+    printf("%d", getCurrentProductPrice(product));
     // Decriment
     ConsolePlacement(103, y + 1);
-    printf("%% %d", product->currentPriceDecrement);
+    printf("%% %d", product->priceModifier);
     printf("\n");
     line('-');
 }
+
+void editListItem(int y, int index, Product *product) {
+    ConsolePlacement(0, y);
+    line('-');
+    //digit
+    printf("%d.", index);
+    // product name
+    ConsolePlacement(4, y + 1);
+    printf("%s", product->name);
+    // Amount
+    ConsolePlacement(20, y + 1);
+    printf("%d", product->startAmount);
+    // Start price
+    ConsolePlacement(50, y + 1);
+    printf("%d", product->startPrice);
+    // Live price
+    ConsolePlacement(75, y + 1);
+    printf("%% %d", product->expectedDelta);
+    // Decriment
+    ConsolePlacement(103, y + 1);
+    printf("%% %d", product->priceDelta);
+    printf("\n");
+    line('-');
+}
+
 void overviewUI(){
     ConsolePlacement(0,1);
     line('-');
@@ -97,4 +123,19 @@ void overviewUI(){
     printf("Live Price");
     ConsolePlacement(100, 2);
     printf("Decrement");
+}
+
+void editviewUI() {
+    ConsolePlacement(0,1);
+    line('-');
+    ConsolePlacement(2, 2);
+    printf("Product name");
+    ConsolePlacement(20, 2);
+    printf("Start amount");
+    ConsolePlacement(45, 2);
+    printf("Start price");
+    ConsolePlacement(71, 2);
+    printf("Amount decrement");
+    ConsolePlacement(100, 2);
+    printf("Price decrement");
 }

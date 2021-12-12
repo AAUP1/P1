@@ -6,6 +6,7 @@
         "typeinfo": "c",
         "limits": "c",
         "*.tcc": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "time.h": "c"
     }
 }
