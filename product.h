@@ -11,9 +11,12 @@ struct Product {
     int startAmount;
     int currentAmount;
     int amountDecrement;
+    int currentAmountDecrement;
+    int expectedAmount;
     int startPrice;
     int currentPrice;
     int priceDecrement;
+    int currentPriceDecrement;
 };
 typedef struct Product Product;
 #endif
