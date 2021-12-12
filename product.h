@@ -5,8 +5,9 @@ struct Product {
     char* name;
     char tempName[MAX_NAME_LENGTH];
     char* test;
-    int tempnum;
+    char tempnum[MAX_NAME_LENGTH];
     int nameLength;
+    int numLength;
     int startAmount;
     int currentAmount;
     int amountDecrement;
