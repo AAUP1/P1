@@ -149,8 +149,8 @@ void editviewUI() {
     printf("Start amount");
     consolePlacement(45, 2);
     printf("Start price");
-    consolePlacement(71, 2);
+    consolePlacement(66, 2);
     printf("Amount decrement");
-    consolePlacement(100, 2);
+    consolePlacement(95, 2);
     printf("Price decrement");
 }
