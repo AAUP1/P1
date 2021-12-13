@@ -59,7 +59,10 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
                 overview->products[i].currentAmount = 0;
             }
         }
-    } else if(input == PAGE_DOWN){
+    } else if(input == ESCAPE) {
+        
+    } else if(input == PAGE_DOWN) {
+        
     }else if(input == HOME) {
         resetTime(overview);
         resetProducts(overview->products, overview->productAmount);

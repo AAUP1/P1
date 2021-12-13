@@ -59,7 +59,6 @@ void initStates() {
 /* Updates a state with an input parameter */
 /* function that controls what keys do what */
 void updateState(int state, int input) {
-    clear();
     switch(state) {
         case MENU:
             updateMenu(&menu, &currentState, &programRunning, input);
@@ -77,6 +76,7 @@ void updateState(int state, int input) {
 }
 /* Redraws the state in the terminal */
 void redrawState(int state) {
+    clear();
     switch(state) {
         case MENU:
             drawMenu(&menu);

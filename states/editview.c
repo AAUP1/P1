@@ -26,8 +26,9 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
         } else if(editView->editingIndex == 5) {
             editView->tempProduct.priceDelta /= 10;
         }
-    }
-    else if(input == UP) {
+    } else if(input == ESCAPE) {
+        
+    } else if(input == UP) {
         
     } else if(input == DOWN) {
 
@@ -68,7 +69,7 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
             qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
             saveProducts(overview->products, &overview->productAmount);
         }
-    }else {
+    } else {
         /*Ways of adding numbers or text to the temporary product*/
         if(editView->editingIndex == 1){
             int maxLength = 0;
