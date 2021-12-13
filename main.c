@@ -1,32 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-//used for live input
-#include <conio.h>
-
-//used for strings.
-#include <string.h>
-
-// wchar needed for wprint too show different symbols.
-#include <wchar.h>
-// ^is this one even used?
-
-//used for clearing the screen!
-#include <unistd.h>
-
-//used for placing cursor in console
-#include <windows.h>
-
-//Used for representing the states
-#include "states/overview.h"
-#include "states/editview.h"
-#include "states/menu.h"
-#include "states/state.h"
-
-#include "loadSave.h"
-
-#include "terminal.h"
-#include "UI.h"
+#include "lib.h"
 
 StateType currentState = MENU;
 

@@ -1,9 +1,4 @@
-#include "menu.h"
-#include "../terminal.h"
-#include <stdio.h>
-#include "state.h"
-/* Used for drawing the UI */
-#include "../UI.h"
+#include "../lib.h"
 
 #define EXIT_INDEX 0
 

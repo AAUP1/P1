@@ -1,11 +1,4 @@
-#include "UI.h"
-#include "terminal.h"
-#include "product.h"
-#include "states/overview.h"
-
-#include <string.h>
-#include <stdio.h>
-#include <windows.h>
+#include "lib.h"
 
 #define SCREENWIDTH 112
 

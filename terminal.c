@@ -1,9 +1,4 @@
-#include <windows.h>
-#include <math.h>
-#include <conio.h>
-#include <stdio.h>
-
-#include "terminal.h"
+#include "lib.h"
 
 #define SPECIAL_CHAR_INDICATOR_1 224
 #define SPECIAL_CHAR_INDICATOR_2 0

@@ -1,15 +1,4 @@
-#include "editview.h"
-#include "state.h"
-#include "../terminal.h"
-#include "../UI.h"
-//#include "overview.h"
-#include <stdio.h>
-#include "../loadSave.h"
-
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <string.h>
+#include "../lib.h"
 
 
 void initEditView(EditView *editView) {

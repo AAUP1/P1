@@ -1,16 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <math.h>
-//Is used to make all letters lowercase, making the search function in drawProducts case insensitive
-#include <ctype.h>
-
-/* overview.h also includes product.h */
-#include "overview.h"
-#include "../terminal.h"
-#include "state.h"
-#include "../loadSave.h"
+#include "../lib.h"
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
