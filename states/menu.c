@@ -35,16 +35,7 @@ void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int in
     }
 }
 void drawMenu(Menu* menu) {
-    /* Draws an extremely cool title text */
-    printf(" ________   ________   _______    ________   ________    \n");
-    printf("|\\   __  \\ |\\   __  \\ |\\  ____\\  |\\   __  \\ |\\   ___ \\    \n");
-    printf("\\ \\  \\|\\ /_\\ \\  \\|\\  \\\\ \\  \\__|  \\ \\  \\|\\  \\\\ \\  \\_|\\ \\   \n");
-    printf(" \\ \\   __  \\\\ \\   _  _\\\\ \\   __\\  \\ \\   __  \\\\ \\  \\ \\\\ \\  \n");
-    printf("  \\ \\  \\|\\  \\\\ \\  \\\\  \\|\\ \\  \\_|__ \\ \\  \\ \\  \\\\ \\  \\_\\\\ \\ \n");
-    printf("   \\ \\_______\\\\ \\__\\\\ _\\ \\ \\_______\\\\ \\__\\ \\__\\\\ \\_______\\ \n");
-    printf("    \\|_______| \\|__|\\|__| \\|_______| \\|__|\\|__| \\|_______|\n");
-    /* Draws all the boxes */
-
+    drawtitle();
     drawBox("Overview", menu->activeBoxIndex == OVERVIEW, 10, 10);
     drawBox("Edit Products", menu->activeBoxIndex == EDIT, 15, 15);
     drawBox("Exit", menu->activeBoxIndex == EXIT_INDEX, 20, 20);

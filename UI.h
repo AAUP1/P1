@@ -6,3 +6,4 @@ void listItem(int, int, Product *);
 void editListItem(int, int, Product *);
 void overviewUI();
 void editviewUI();
+void drawtitle();
