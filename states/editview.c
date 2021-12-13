@@ -104,14 +104,11 @@ void drawEditView(EditView *editView, Overview *overview, Product *product) {
     drawEditProducts(overview, editView);
     ConsolePlacement(0, 0);
     printf("check: %i", editView->editingIndex);
-    /*if(editingproduct >= 1){
-        editingMode(editView, overview, product);
-               
-    } */
+
 }
 void drawEditProducts(Overview *overview, EditView *editView) {
     int i, y = 0;
-    if(editingMode != 0) {
+    if(editView->editingIndex != 0) {
         editListItem(3, 69, &editView->tempProduct);
     }
     /* Cycles through all products */
@@ -124,38 +121,6 @@ void drawEditProducts(Overview *overview, EditView *editView) {
         }
     }
 }
-void editingMode(EditView *editView, Overview *overview, Product *product){
-    
-    /*if(editingproduct == 1){
-        ConsolePlacement(4, 8);
-        printf("%s", product->tempName);
-    } else if(editingproduct == 2){
-        ConsolePlacement(20, 8);
-        printf(" %s", product->tempnum);
-    } else if(editingproduct == 3){
-        ConsolePlacement(50, 8);
-        printf(" %s", product->tempnum);
-    } else if(editingproduct == 4){
-        ConsolePlacement(75, 8);
-        printf(" %s", product->tempnum);
-    } else if(editingproduct == 5){
-        ConsolePlacement(103, 8);
-        printf(" %s", product->tempnum);
-    }*/
-
-    
-
-}
-/* clears tempName*/
-void clearTName(Product *product){
-    /*while(product->nameLength >= 1 && product->numLength >= 1){
-        product->nameLength--;
-        product->tempName[product->numLength] = '\0';
-        product->numLength--;
-        product->tempnum[product->numLength] = '\0';
-    }*/
-}
-
 
 Product *findProduct(char *name, Product *products, int productAmount) {
     int i;
