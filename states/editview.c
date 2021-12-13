@@ -34,9 +34,15 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
 
     } else if(input == LEFT) {
         /*The user can control what thing to be editing in*/
-        editView->editingIndex--;
+        if(editView->editingIndex > 0){
+            editView->editingIndex--;
+        }
     } else if(input == RIGHT) {
-        editView->editingIndex++;
+        if (editView->editingIndex <= 4){
+            editView->editingIndex++;
+        }
+        
+        
     } else if(input == ENTER){
         if(editView->editingIndex == 0) {
             if(editView->searchTextLength >= 1) {
@@ -78,20 +84,19 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
                 editView->tempProduct.name[strlen(editView->tempProduct.name)] = input;
                 editView->tempProduct.name[strlen(editView->tempProduct.name)+1] = '\0';
             }
-
-        } else if(editView->editingIndex == 2){
+        } else if(editView->editingIndex == 2 && isNumber(input)){
             editView->tempProduct.startAmount *= 10;
             editView->tempProduct.startAmount += input-48;
-        } else if(editView->editingIndex == 3){
+        } else if(editView->editingIndex == 3 && isNumber(input)){
             editView->tempProduct.startPrice *= 10;
             editView->tempProduct.startPrice += input-48;
-        } else if(editView->editingIndex == 4){
+        } else if(editView->editingIndex == 4 && isNumber(input)){
             editView->tempProduct.expectedDelta *= 10;
             editView->tempProduct.expectedDelta += input-48;
-        } else if(editView->editingIndex == 5){
+        } else if(editView->editingIndex == 5 && isNumber(input)){
             editView->tempProduct.priceDelta *= 10;
             editView->tempProduct.priceDelta += input-48;
-        } else {
+        } else if(editView->editingIndex < 1) {
             /*Adds a character to the searchText*/
             editView->searchText[editView->searchTextLength] = input;
             editView->searchText[editView->searchTextLength+1] = '\0';
@@ -100,7 +105,6 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
     }
 }
 void drawEditView(EditView *editView, Overview *overview, Product *product) {
-    
     /*Draws temporary search box*/
     ConsolePlacement(20, 0);
     printf("Search: %s", editView->searchText);

@@ -12,3 +12,4 @@ void ConsolePlacement(int, int);
 
 int readCharacter();
 int mapNonASCIICharacter(char character);
+int isNumber(int input);

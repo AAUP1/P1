@@ -35,5 +35,11 @@ int readCharacter() {
 int mapNonASCIICharacter(char character) {
     return pow(2, sizeof(char)*8) + character;
 }
+int isNumber(int input){
+        if(input >= 49 && input <= 57){
+            return 1;
+        } else return 0;
+        
+}
 
 
