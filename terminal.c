@@ -30,15 +30,15 @@ int readCharacter() {
     }
     return read_char;
 }
-// If a character is not in the ASCII character table, it will be mapped outside of the char datasize
+/* If a character is not in the ASCII character table, it will be mapped outside of the char datasize*/
 int mapNonASCIICharacter(char character) {
-    return pow(2, sizeof(char)*8) + character;
+    return pow(2, sizeof(char)*8) + character; 
 }
+/*returns true if the input is a number between 1 and 9*/
 int isNumber(int input){
         if(input >= 49 && input <= 57){
             return 1;
-        } else return 0;
-        
+        } else return 0;        
 }
 
 

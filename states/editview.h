@@ -1,6 +1,7 @@
 #include "state.h"
 #include "overview.h"
 
+
 struct EditView {
     char searchText[MAX_TEXT_LENGTH];
     int searchTextLength;

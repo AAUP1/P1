@@ -85,17 +85,38 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
                 editView->tempProduct.name[strlen(editView->tempProduct.name)+1] = '\0';
             }
         } else if(editView->editingIndex == 2 && isNumber(input)){
-            editView->tempProduct.startAmount *= 10;
-            editView->tempProduct.startAmount += input-48;
+            int intLength = 0;
+            intLength = floor(log10(abs(editView->tempProduct.startAmount))) + 1;
+            if (intLength < MAX_NUMBER_LENGTH){
+                editView->tempProduct.startAmount *= 10;
+                editView->tempProduct.startAmount += input-48; 
+            }
+            
+
         } else if(editView->editingIndex == 3 && isNumber(input)){
-            editView->tempProduct.startPrice *= 10;
-            editView->tempProduct.startPrice += input-48;
+            int intLength = 0;
+            intLength = floor(log10(abs(editView->tempProduct.startPrice))) + 1;
+            if (intLength < MAX_NUMBER_LENGTH){
+                editView->tempProduct.startPrice *= 10;
+                editView->tempProduct.startPrice += input-48;
+            }
+            
         } else if(editView->editingIndex == 4 && isNumber(input)){
-            editView->tempProduct.expectedDelta *= 10;
-            editView->tempProduct.expectedDelta += input-48;
+            int intLength = 0;
+            intLength = floor(log10(abs(editView->tempProduct.expectedDelta))) + 1;
+            if (intLength < MAX_NUMBER_LENGTH - 7){ // this is done to ensure that the user cant decriment with more than 2 digits.
+                editView->tempProduct.expectedDelta *= 10;
+                editView->tempProduct.expectedDelta += input-48;
+            }
+            
         } else if(editView->editingIndex == 5 && isNumber(input)){
-            editView->tempProduct.priceDelta *= 10;
-            editView->tempProduct.priceDelta += input-48;
+            int intLength = 0;
+            intLength = floor(log10(abs(editView->tempProduct.priceDelta))) + 1;
+            if (intLength < MAX_NUMBER_LENGTH - 7){ // this is done to ensure that the user cant decriment with more than 2 digits.
+                editView->tempProduct.priceDelta *= 10;
+                editView->tempProduct.priceDelta += input-48;
+            }
+            
         } else if(editView->editingIndex < 1) {
             /*Adds a character to the searchText*/
             editView->searchText[editView->searchTextLength] = input;
