@@ -32,10 +32,6 @@ int main(void) {
             /* Sends signal to the right state */
             updateState(currentState, characterPressed);
             redrawState(currentState);
-
-            //function that can test and use charater_pressed!
-            //updateOnPress(character_pressed);
-
         }
     } 
 
@@ -57,7 +53,6 @@ void initStates() {
 }
 
 /* Updates a state with an input parameter */
-/* function that controls what keys do what */
 void updateState(int state, int input) {
     switch(state) {
         case MENU:
@@ -87,27 +82,11 @@ void redrawState(int state) {
         case EDIT:
             drawEditView(&editView, &overview, &product);
             break;
-        case SEARCH:
+        /*case SEARCH:
             drawEditView(&editView, &overview, &product); /* DIS IS NOT SEARCH!!!
                                         no shit sherlock it points to editView :) - Bjørn*/
     }
 }
-
-
-/*
-
-KNOWN ISSUES:
-    * [[[FIXED]]]   When putting inizializers in a separate function, the program crashes
-
-*/
-
-/*
-
-TODO:
-    * [[[DONE]]]   Change all variable names containing "selected" to "active"
-
-*/
-
 /*
 
 THINGS TO CHECK IF YOU FORGOT:
@@ -118,5 +97,4 @@ THINGS TO CHECK IF YOU FORGOT:
         4. A draw function that types the text into the terminal
         5. Add this state entry to initStates, updateStates and drawStates
         !!! See other states for reference
-
 */

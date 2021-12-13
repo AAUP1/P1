@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 /* Gets the definition of the product struct */
 #include "product.h"
 

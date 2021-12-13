@@ -127,13 +127,13 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
 }
 void drawEditView(EditView *editView, Overview *overview, Product *product) {
     /*Draws temporary search box*/
-    ConsolePlacement(20, 0);
+    consolePlacement(20, 0);
     printf("Search: %s", editView->searchText);
     /*Draws the variable lables*/
     editviewUI();
     /*Draws a list of the first n products*/
     drawEditProducts(overview, editView);
-    ConsolePlacement(0, 0);
+    consolePlacement(0, 0);
     printf("check: %i", editView->editingIndex);
 
 }

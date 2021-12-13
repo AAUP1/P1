@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-
 #include "lib.h"
 
 

@@ -15,7 +15,7 @@ struct Product {
     /*Dynamic values*/
         int currentAmount;
 
-        /* What percentage of the starting value is the current value */
+    /* What percentage of the starting value is the current value */
         int expectedModifier;
         int priceModifier;
 };

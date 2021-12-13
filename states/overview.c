@@ -137,9 +137,9 @@ void removeProduct(char *name, Overview *overview) {
         /* If the product has been found, move the proceding products one step down over the product that should be removed */
         if(found) {
             if(i == overview->productAmount-1) {
-                //Do nothing if we have reached the end of the array, as the length will just be shortened
+                /*Do nothing if we have reached the end of the array, as the length will just be shortened*/
             } else {
-                //Moves the products one space down
+                /*Moves the products one space down*/
                 overview->products[i] = overview->products[i+1];
             }
         }
@@ -157,7 +157,7 @@ void updateProducts(Overview *overview) {
 
 void updateTime(Overview *overview) {
     time(&overview->currentTime);
-    overview->currentTime = 1639288800; //Svarer til d. 12. december 2021 kl. 7:00
+    overview->currentTime = 1639288800; /*This corresponds to the 12th of december 2021 at 7 AM*/
     overview->currentTime += overview->timeOffset;
     while(overview->currentTime%LENGTH_OF_DAY + overview->timeBetweenUpdates < overview->nextUpdateTime%LENGTH_OF_DAY) {
         overview->nextUpdateTime -= overview->timeBetweenUpdates;

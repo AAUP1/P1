@@ -2,12 +2,11 @@
 
 
 
-// makes a menu button: drawBox("text in center", 1/0);
+/* makes a menu button: drawBox("text in center", 1/0);*/
 void drawBox(char* str, int isactive, int x, int y){
-    //takes the lengh of the input and uses it    
-    int strL = strlen(str);
-    //Box top
-    ConsolePlacement(x, y);
+    int strL = strlen(str); //takes the lengh of the input and uses it    
+    /*Draws the top of the box*/
+    consolePlacement(x, y);
     printf("/");
     for(int i = 0; i < strL + 2; i++){
         if(isactive){
@@ -20,90 +19,103 @@ void drawBox(char* str, int isactive, int x, int y){
     printf("\n");
     /* Draws arrow behind box if it is active */
     if(isactive) {
-        ConsolePlacement(x - 5, y + 1);
+        consolePlacement(x - 5, y + 1);
         printf("--->");
-        ConsolePlacement(x + strL + 5, y + 1);
+        consolePlacement(x + strL + 5, y + 1);
         printf("<---");
     }
-    ConsolePlacement(x, y + 1);
+    consolePlacement(x, y + 1);
     printf("| ");
     
     
-    //prints the text in the box
+    /*prints the text in the box*/
     for(int i = 0; i < strL; i++){
-        printf("%c", str[i]);
-    }
-    
+        printf("%c", str[i]); 
+    }    
     printf(" |\n");
-    ConsolePlacement(x, y + 2);
-    //box bottom
+    consolePlacement(x, y + 2);
+
+    /*Draws the buttom of the box*/
     printf("\\");
     for(int i = 0; i < strL + 2; i++){
         if(isactive){
-            printf("=");
+            printf("="); // if active draw these
         } else{
-            printf("-");
+            printf("-"); // in inactive draw these
         }
     }
     printf("/\n");
 }
 
-//draws a line across the screen!
+/*draws a line across the screen*/
 void line(char c){
     for(int i = 0; i < SCREENWIDTH; i++){
         wprintf(L"%c", c);
     }
     printf("\n");
 }
+/*Lists an item with Name, amount, price and decrement*/
 void listItem(int y, int index, Product *product) {
-    ConsolePlacement(0, y);
+    consolePlacement(0, y);
     line('-');
-    //digit
+    
+    /*Digit*/
     printf("%d.", index);
-    // product name
-    ConsolePlacement(4, y + 1);
+    
+    /*Product name*/
+    consolePlacement(4, y + 1);
     printf("%s", product->name);
-    // Amount
-    ConsolePlacement(20, y + 1);
+    
+    /*Amount*/
+    consolePlacement(20, y + 1);
     printf("%d [%d]", product->currentAmount, getExpectedProductAmount(product));
-    // Start price
-    ConsolePlacement(50, y + 1);
+    
+    /*Start price*/
+    consolePlacement(50, y + 1);
     printf("%d", product->startPrice);
-    // Live price
-    ConsolePlacement(75, y + 1);
+    
+    /*Live price*/
+    consolePlacement(75, y + 1);
     printf("%d", getCurrentProductPrice(product));
-    // Decriment
-    ConsolePlacement(103, y + 1);
+    
+    /*Decriment*/
+    consolePlacement(103, y + 1);
     printf("%% %d", product->priceModifier);
     printf("\n");
     line('-');
 }
-
+/*List an item with all ediable parameters*/
 void editListItem(int y, int index, Product *product) {
-    ConsolePlacement(0, y);
+    consolePlacement(0, y);
     line('-');
-    //digit
+    
+    /*Digit*/
     printf("%d.", index);
-    // product name
-    ConsolePlacement(4, y + 1);
+    
+    /*Product name*/
+    consolePlacement(4, y + 1);
     printf("%s", product->name);
-    // Amount
-    ConsolePlacement(20, y + 1);
+    
+    /*Amount*/
+    consolePlacement(20, y + 1);
     printf("%d", product->startAmount);
-    // Start price
-    ConsolePlacement(50, y + 1);
+    
+    /*Start price*/
+    consolePlacement(50, y + 1);
     printf("%d", product->startPrice);
-    // Live price
-    ConsolePlacement(75, y + 1);
+    
+    /*Live price*/
+    consolePlacement(75, y + 1);
     printf("%% %d", product->expectedDelta);
-    // Decriment
-    ConsolePlacement(103, y + 1);
+    
+    /*Decriment*/
+    consolePlacement(103, y + 1);
     printf("%% %d", product->priceDelta);
     printf("\n");
     line('-');
 }
+/* Draws an extremely cool title text */
 void drawtitle() {
-    /* Draws an extremely cool title text */
     printf(" ________   ________   _______    ________   ________    \n");
     printf("|\\   __  \\ |\\   __  \\ |\\  ____\\  |\\   __  \\ |\\   ___ \\    \n");
     printf("\\ \\  \\|\\ /_\\ \\  \\|\\  \\\\ \\  \\__|  \\ \\  \\|\\  \\\\ \\  \\_|\\ \\   \n");
@@ -111,34 +123,34 @@ void drawtitle() {
     printf("  \\ \\  \\|\\  \\\\ \\  \\\\  \\|\\ \\  \\_|__ \\ \\  \\ \\  \\\\ \\  \\_\\\\ \\ \n");
     printf("   \\ \\_______\\\\ \\__\\\\ _\\ \\ \\_______\\\\ \\__\\ \\__\\\\ \\_______\\ \n");
     printf("    \\|_______| \\|__|\\|__| \\|_______| \\|__|\\|__| \\|_______|\n");
-    /* Draws all the boxes */
 }
+/*Draws the top UI in Overview*/
 void overviewUI(){
-    ConsolePlacement(0,1);
+    consolePlacement(0,1);
     line('-');
-    ConsolePlacement(2, 2);
+    consolePlacement(2, 2);
     printf("Product name");
-    ConsolePlacement(20, 2);
+    consolePlacement(20, 2);
     printf("Product amount");
-    ConsolePlacement(45, 2);
+    consolePlacement(45, 2);
     printf("Start Price");
-    ConsolePlacement(71, 2);
+    consolePlacement(71, 2);
     printf("Live Price");
-    ConsolePlacement(100, 2);
+    consolePlacement(100, 2);
     printf("Decrement");
 }
-
+/*Draws the top UI in Editview*/
 void editviewUI() {
-    ConsolePlacement(0,1);
+    consolePlacement(0,1);
     line('-');
-    ConsolePlacement(2, 2);
+    consolePlacement(2, 2);
     printf("Product name");
-    ConsolePlacement(20, 2);
+    consolePlacement(20, 2);
     printf("Start amount");
-    ConsolePlacement(45, 2);
+    consolePlacement(45, 2);
     printf("Start price");
-    ConsolePlacement(71, 2);
+    consolePlacement(71, 2);
     printf("Amount decrement");
-    ConsolePlacement(100, 2);
+    consolePlacement(100, 2);
     printf("Price decrement");
 }

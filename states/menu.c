@@ -36,6 +36,7 @@ void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int in
 }
 void drawMenu(Menu* menu) {
     drawtitle();
+    /* Draws all the boxes */
     drawBox("Overview", menu->activeBoxIndex == OVERVIEW, 10, 10);
     drawBox("Edit Products", menu->activeBoxIndex == EDIT, 15, 15);
     drawBox("Exit", menu->activeBoxIndex == EXIT_INDEX, 20, 20);
