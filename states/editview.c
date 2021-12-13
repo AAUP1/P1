@@ -71,8 +71,13 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
     }else {
         /*Ways of adding numbers or text to the temporary product*/
         if(editView->editingIndex == 1){
-            editView->tempProduct.name[strlen(editView->tempProduct.name)] = input;
-            editView->tempProduct.name[strlen(editView->tempProduct.name)+1] = '\0';
+            int maxLength = 0;
+            maxLength = strlen(editView->tempProduct.name); 
+            if(maxLength < 15){
+                editView->tempProduct.name[strlen(editView->tempProduct.name)] = input;
+                editView->tempProduct.name[strlen(editView->tempProduct.name)+1] = '\0';
+            }
+
         } else if(editView->editingIndex == 2){
             editView->tempProduct.startAmount *= 10;
             editView->tempProduct.startAmount += input-48;
@@ -109,6 +114,7 @@ void drawEditView(EditView *editView, Overview *overview, Product *product) {
 void drawEditProducts(Overview *overview, EditView *editView) {
     int i, y = 0;
     if(editView->editingIndex != 0) {
+        /* could replace 69 with x or equvilant*/
         editListItem(3, 69, &editView->tempProduct);
     }
     /* Cycles through all products */
