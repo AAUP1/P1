@@ -9,7 +9,5 @@ void loadProducts(Product *products, int *productAmount);
 void saveProducts(Product *products, int *productAmount);
 #endif
 
-int countLinesInFile(FILE *f);
-
 void saveStartTime(long int startUpdatingTime);
 void loadStartTime(long int *startUpdatingTime);
