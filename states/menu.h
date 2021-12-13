@@ -1,6 +1,8 @@
 #include "../UI.h"
 #include "state.h"
 
+#define EXIT_INDEX 0
+
 struct Menu {
     int box_amount;
     int activeBoxIndex;

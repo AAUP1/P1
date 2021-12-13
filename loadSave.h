@@ -3,6 +3,8 @@
 /* Gets the definition of the product struct */
 #include "product.h"
 
+#define MAX_NAME_LENGTH 32
+
 #ifndef PRODUCT_SAVELOAD
 #define PRODUCT_SAVELOAD
 void loadProducts(Product *products, int *productAmount);

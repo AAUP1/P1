@@ -1,7 +1,6 @@
 #include "lib.h"
 
-#define SPECIAL_CHAR_INDICATOR_1 224
-#define SPECIAL_CHAR_INDICATOR_2 0
+
 
 /* clear function to clear console on all OS
 clear will move cursor back to (0,0) in console*/

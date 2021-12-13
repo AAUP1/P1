@@ -1,6 +1,6 @@
 #include "../lib.h"
 
-#define EXIT_INDEX 0
+
 
 void initMenu(Menu* menu) {
     menu->activeBoxIndex = 0;

@@ -1,3 +1,6 @@
+#define SPECIAL_CHAR_INDICATOR_1 224
+#define SPECIAL_CHAR_INDICATOR_2 0
+
 enum Keyname {
         //delete has been renamed "DEL" because its a preset from <windows.h>
         UP = 328, DOWN = 336, LEFT = 331, RIGHT = 333,

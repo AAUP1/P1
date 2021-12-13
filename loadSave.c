@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "loadSave.h"
+#include "lib.h"
 
-#define MAX_NAME_LENGTH 32
+
 
 void loadProducts(Product *products, int *productAmount) {
     FILE *file = fopen("products.txt", "r");

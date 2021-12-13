@@ -110,7 +110,7 @@ TODO:
 
 /*
 
-THINGS TO CHECK IF YOU FORGOR:
+THINGS TO CHECK IF YOU FORGOT:
     * Creating a new state for the state machine requires following elements to be implemented:
         1. A struct representing the state with objects associated with this state
         2. An init function that initializes all variables and structs inside the state struct

@@ -1,6 +1,6 @@
 #include "lib.h"
 
-#define SCREENWIDTH 112
+
 
 // makes a menu button: drawBox("text in center", 1/0);
 void drawBox(char* str, int isactive, int x, int y){
