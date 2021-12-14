@@ -1,7 +1,5 @@
 #include "lib.h"
 
-
-
 void loadProducts(Product *products, int *productAmount) {
     FILE *file = fopen("products.txt", "r");
     if(file != NULL) {
@@ -13,7 +11,12 @@ void loadProducts(Product *products, int *productAmount) {
             /* Makes a temporary allocation for the name*/
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
             int startAmount, expectedDelta, startPrice, priceDelta, currentAmount, expectedModifier, priceModifier;
-            fscanf(file, " %s %d %d %d %d %d %d %d", name, &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
+            /* Puts the cursor for fscanf after the name of the product */
+            fscanf(file, " %-32s", name);
+            /* Gets the name of the product - this does not move the file cursor */
+            fgets(name, MAX_NAME_LENGTH, file);
+            /* Scans the rest of the file */
+            fscanf(file, " %d %d %d %d %d %d %d", &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
             /* Copies each letter of the temporary name into the product name */
             strcpy(products[i].name, name);
             products[i].startAmount = startAmount;
@@ -38,7 +41,7 @@ void saveProducts(Product *products, int *productAmount) {
     fprintf(file, "%d \n", *productAmount);
     /* Saves the new product variables to the file */
     for(i = 0; i < *productAmount; i++) {
-        fprintf(file, "%s %d %d %d %d %d %d %d \n", 
+        fprintf(file, "%-32s %d %d %d %d %d %d %d \n", 
             products[i].name, 
             products[i].startAmount, products[i].expectedDelta, products[i].startPrice, 
             products[i].priceDelta, products[i].currentAmount, products[i].expectedModifier, products[i].priceModifier);
