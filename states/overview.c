@@ -201,7 +201,11 @@ int getCurrentProductPrice(Product *product) {
     return (product->startPrice * product->priceModifier) / 100;
 }
 int getExpectedProductAmount(Product *product) {
-    return (product->startAmount * (product->expectedModifier-product->expectedDelta)) / 100;
+    int expectedAmount = product->expectedModifier-product->expectedDelta;
+    if(expectedAmount < 0) {
+        expectedAmount = 0;
+    }
+    return (product->startAmount * (expectedAmount)) / 100;
 }
 
 int lowercaseStrcmp(char *str1, char *str2) {
