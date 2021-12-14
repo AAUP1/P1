@@ -154,3 +154,22 @@ void editviewUI() {
     consolePlacement(95, 2);
     printf("Price decrement");
 }
+
+void controls(int currentState){
+    if(currentState == MENU){
+        char* s = "|^ Move Up|   |v Move Down|   |ENTER select|";
+        int i = (112 - (strlen(s)-1))/2;
+        consolePlacement(i, 37);
+        printf("%s", s);
+    } else if(currentState == OVERVIEW){
+        char* s = "|BACKSPACE Menu| |^v Change start time| |< Time mode| |> Searching mode| |DEL Remove product| |HOME Reset|";
+        int i = (112 - (strlen(s)-1))/2;
+        consolePlacement(i, 37);
+        printf("%s", s);
+    } else if(currentState == EDIT){
+        char* s = "|BACKSPACE Menu| |<> Swap editing mode| |ENTER create/edit/save|";
+        int i = (112 - (strlen(s)-1))/2;
+        consolePlacement(i, 37);
+        printf("%s", s);
+    }
+}

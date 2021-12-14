@@ -9,3 +9,4 @@ void editListItem(int, int, int, Product *);
 void overviewUI();
 void editviewUI();
 void drawtitle();
+void controls(int currentState);

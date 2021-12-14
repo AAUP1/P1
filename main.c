@@ -20,9 +20,9 @@ int main(void) {
     int characterPressed = '\0';
 
     initStates();
-
     /* Initial draw to the screen before any input is given */
     redrawState(currentState);
+    controls(currentState);
     while(programRunning) {
         if(kbhit()) {
             /* Reads a character */
@@ -32,6 +32,7 @@ int main(void) {
             /* Sends signal to the right state */
             updateState(currentState, characterPressed);
             redrawState(currentState);
+            controls(currentState);            
         }
     } 
 

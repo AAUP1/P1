@@ -40,5 +40,5 @@ void drawMenu(Menu* menu) {
     drawBox("Overview", menu->activeBoxIndex == OVERVIEW, 10, 10);
     drawBox("Edit Products", menu->activeBoxIndex == EDIT, 15, 15);
     drawBox("Exit", menu->activeBoxIndex == EXIT_INDEX, 20, 20);
-
+    
 }
