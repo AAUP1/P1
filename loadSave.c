@@ -10,9 +10,11 @@ void loadProducts(Product *products, int *productAmount) {
         fscanf(file, " %d", productAmount);
         /* Scans for all the variables in all the products and saves them to a product array */
         for(i = 0; i < *productAmount; i++) {
+            /* Makes a temporary allocation for the name*/
             char* name = (char *) malloc(MAX_NAME_LENGTH * sizeof(char));
             int startAmount, expectedDelta, startPrice, priceDelta, currentAmount, expectedModifier, priceModifier;
             fscanf(file, " %s %d %d %d %d %d %d %d", name, &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
+            /* Copies each letter of the temporary name into the product name */
             strcpy(products[i].name, name);
             products[i].startAmount = startAmount;
             products[i].expectedDelta = expectedDelta;
