@@ -80,7 +80,7 @@ void listItem(int y, int index, Product *product) {
     
     /*Decriment*/
     consolePlacement(103, y + 1);
-    printf("%% %d", product->priceModifier);
+    printf("%% %d", product->priceDelta);
     printf("\n");
     line('-');
 }
