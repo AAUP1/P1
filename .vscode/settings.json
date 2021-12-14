@@ -8,6 +8,9 @@
         "*.tcc": "c",
         "math.h": "c",
         "time.h": "c",
-        "lib.h": "c"
+        "lib.h": "c",
+        "conio.h": "c",
+        "string.h": "c",
+        "cmath": "c"
     }
 }

@@ -141,7 +141,7 @@ void drawEditProducts(Overview *overview, EditView *editView) {
     int i, y = 0;
     if(editView->editingIndex != 0) {
         /* could replace 69 with x or equvilant*/
-        editListItem(3, 69, &editView->tempProduct);
+        editListItem(3, 69, editView->editingIndex, &editView->tempProduct);
     }
     /* Cycles through all products */
     for(i = 0; i < overview->productAmount && y < ((38 - 7) / 3); i++) {
@@ -149,7 +149,7 @@ void drawEditProducts(Overview *overview, EditView *editView) {
         /* If searchText is equal to a substring of the name of the product, draw it */
         if(lowercaseStrstr(currentProduct->name, editView->searchText)) {
             y++;
-            editListItem(4 + y * 3, y, currentProduct);
+            editListItem(4 + y * 3, y, 0, currentProduct);
         }
     }
 }

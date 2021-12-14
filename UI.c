@@ -85,7 +85,7 @@ void listItem(int y, int index, Product *product) {
     line('-');
 }
 /*List an item with all ediable parameters*/
-void editListItem(int y, int index, Product *product) {
+void editListItem(int y, int index, int editing, Product *product) {
     consolePlacement(0, y);
     line('-');
     
@@ -94,23 +94,23 @@ void editListItem(int y, int index, Product *product) {
     
     /*Product name*/
     consolePlacement(4, y + 1);
-    printf("%s", product->name);
+    printf("%c%s", editing == 1 ? '>' : ' ', product->name);
     
-    /*Amount*/
+    /*Start Amount*/
     consolePlacement(20, y + 1);
-    printf("%d", product->startAmount);
+    printf("%c%d", editing == 2 ? '>' : ' ', product->startAmount);
     
     /*Start price*/
     consolePlacement(50, y + 1);
-    printf("%d", product->startPrice);
+    printf("%c%d", editing == 3 ? '>' : ' ', product->startPrice);
     
-    /*Live price*/
+    /*Amount Decrement*/
     consolePlacement(75, y + 1);
-    printf("%% %d", product->expectedDelta);
-    
-    /*Decriment*/
+    printf("%c%% %d", editing == 4 ? '>' : ' ', product->expectedDelta);
+
+    /*Price Decrement*/
     consolePlacement(103, y + 1);
-    printf("%% %d", product->priceDelta);
+    printf("%c%% %d", editing == 5 ? '>' : ' ', product->priceDelta);
     printf("\n");
     line('-');
 }
