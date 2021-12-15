@@ -68,7 +68,7 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
         resetProducts(overview->products, overview->productAmount);
     } else if(input == END) {
         
-    } else {
+    } else if(overview->searchTextLength < 20) {
         /*Adds a character to the searchText*/
         overview->searchText[overview->searchTextLength] = input;
         overview->searchText[overview->searchTextLength+1] = '\0';

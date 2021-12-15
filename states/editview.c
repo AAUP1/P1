@@ -117,7 +117,7 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
                 editView->tempProduct.priceDelta += input-48;
             }
             
-        } else if(editView->editingIndex < 1) {
+        } else if(editView->editingIndex < 1 && editView->searchTextLength < 20) {
             /*Adds a character to the searchText*/
             editView->searchText[editView->searchTextLength] = input;
             editView->searchText[editView->searchTextLength+1] = '\0';
