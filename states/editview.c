@@ -3,8 +3,13 @@
 
 void initEditView(EditView *editView) {
     editView->editingIndex = 0;
-    editView->editingProduct = NULL; }
+    editView->editingProduct = NULL;    
+}
 void updateEditView(EditView *editView, Overview *overview, StateType *currentState, int input) {
+    if(editView->popupIsActivated) {
+        updatePopup(editView, overview, input);
+        return;
+    }
     if(input == BACKSPACE) {
         /*Removes a character from the searchText*/
         if(editView->editingIndex == 0) {
@@ -27,7 +32,7 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
             editView->tempProduct.priceDelta /= 10;
         }
     } else if(input == ESCAPE) {
-        
+        editView->editingIndex = 0;
     } else if(input == UP) {
         
     } else if(input == DOWN) {
@@ -41,39 +46,19 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
         if (editView->editingIndex <= 4){
             editView->editingIndex++;
         }
-        
-        
     } else if(input == ENTER){
+        /*If the user is searching*/
         if(editView->editingIndex == 0) {
+            /*And if there is text written in the search bar*/
             if(editView->searchTextLength >= 1) {
-                /* If there is text in the search bar, find a product with that name and mark it for editing */
-                editView->editingProduct = findProduct(editView->searchText, overview->products, overview->productAmount);
-                /* If it does not exist, create that product and find that for editing */
-                if(editView->editingProduct == NULL) {
-                    addProduct(overview, editView->searchText, 100, 100, 10, 10);
-                    editView->editingProduct = findProduct(editView->searchText, overview->products, overview->productAmount);
-                }
-                /* Change a flag to show that we are editing */
-                editView->editingIndex = 1;
-                /* Transfer all the values of the product selected for editing into a temporary struct */
-                strcpy(editView->tempProduct.name, editView->editingProduct->name);
-                editView->tempProduct.startAmount = editView->editingProduct->startAmount;
-                editView->tempProduct.startPrice = editView->editingProduct->startPrice;
-                editView->tempProduct.priceDelta = editView->editingProduct->priceDelta;
-                editView->tempProduct.expectedDelta = editView->editingProduct->expectedDelta;
+                initiateEditing(editView, overview);
             }
         } else {
-            /* If the user is already editing and ENTER is pressed, transfer all the temporary values back into the permanent products*/
-            /* There should probably be an 'are you sure' prompt in here somehow */
-            strcpy(editView->editingProduct->name, editView->tempProduct.name);
-            editView->editingProduct->startAmount = editView->tempProduct.startAmount;
-            editView->editingProduct->startPrice = editView->tempProduct.startPrice;
-            editView->editingProduct->priceDelta = editView->tempProduct.priceDelta;
-            editView->editingProduct->expectedDelta = editView->tempProduct.expectedDelta;
-            editView->editingIndex = 0;
-            /* Sorts the product array with the new product introduced or with the new product name*/
-            qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
-            saveProducts(overview->products, &overview->productAmount);
+            /*However if the user is somewhere other than the search bar (is editing a product), try to apply the new changes */
+            char *popupText = (char *) malloc(sizeof(char)*128);
+            sprintf(popupText, "Are you done editing the product named %s?", editView->editingProduct->name, editView->tempProduct.name);
+            showPopup(editView, popupText, "Yes, save it", "No, go back", checkForAbnormalities);
+            free(popupText);
         }
     } else {
         /*Ways of adding numbers or text to the temporary product*/
@@ -126,16 +111,17 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
     }
 }
 void drawEditView(EditView *editView, Overview *overview, Product *product) {
+    if(editView->popupIsActivated) {
+        drawPopup(editView);
+        return;
+    }
     /*Draws temporary search box*/
-    consolePlacement(20, 0);
+    consolePlacement(0, 0);
     printf("Search: %s", editView->searchText);
     /*Draws the variable lables*/
     editviewUI();
     /*Draws a list of the first n products*/
     drawEditProducts(overview, editView);
-    consolePlacement(0, 0);
-    printf("check: %i", editView->editingIndex);
-
 }
 void drawEditProducts(Overview *overview, EditView *editView) {
     int i, y = 0;
@@ -163,4 +149,95 @@ Product *findProduct(char *name, Product *products, int productAmount) {
         }
     }
     return NULL;
+}
+
+/*Draws the popup instead of the editing screen*/
+void drawPopup(EditView *editView) {
+    printf(editView->popupText);
+    drawBox(editView->popupLeftText, editView->selectedPopupButton == 0, 40, 15);
+    drawBox(editView->popupRightText, editView->selectedPopupButton == 1, 70, 15);
+}
+/*Takes keyboard input for the popup screen if it is showing*/
+void updatePopup(EditView *editView, Overview *overview, int input) {
+    if(input == LEFT) {
+        editView->selectedPopupButton = 0;
+    } else if(input == RIGHT) {
+        editView->selectedPopupButton = 1;
+    } else if(input == ENTER) {
+        hidePopup(editView, overview);
+    }
+}
+/*Activates the popup and gives it appropriate values including a function that should be performed when the popup is hidden*/
+void showPopup(EditView *editView, char *popupText, char *popupLeftText, char *popupRightText, void (*f)(EditView *, Overview *)) {
+    editView->popupIsActivated = 1;
+    strcpy(editView->popupText, popupText);
+    editView->popupLeftText = popupLeftText;
+    editView->popupRightText = popupRightText;
+    editView->selectedPopupButton = 1;
+    editView->popupFunction = f;
+}
+/*Hides the popup and executes the function that it was assigned in the "showPopup" function */
+void hidePopup(EditView *editView, Overview *overview) {
+    editView->popupIsActivated = 0;
+    if(editView->selectedPopupButton == 0 && editView->popupFunction != NULL) {
+        editView->popupFunction(editView, overview);
+    }
+}
+
+void initiateEditing(EditView *editView, Overview *overview) {
+    /* If there is text in the search bar, find a product with that name and mark it for editing */
+    editView->editingProduct = findProduct(editView->searchText, overview->products, overview->productAmount);
+    /* If it does not exist, create that product and find that for editing */
+    if(editView->editingProduct == NULL) {
+        addProduct(overview, editView->searchText, 100, 100, 10, 10);
+        editView->editingProduct = findProduct(editView->searchText, overview->products, overview->productAmount);
+    }
+    /* Change a flag to show that we are editing */
+    editView->editingIndex = 1;
+    /* Transfer all the values of the product selected for editing into a temporary struct */
+    strcpy(editView->tempProduct.name, editView->editingProduct->name);
+    editView->tempProduct.startAmount = editView->editingProduct->startAmount;
+    editView->tempProduct.startPrice = editView->editingProduct->startPrice;
+    editView->tempProduct.priceDelta = editView->editingProduct->priceDelta;
+    editView->tempProduct.expectedDelta = editView->editingProduct->expectedDelta;
+}
+/*Checks for all the user definable inputs if they are abnormally large or small, if some are, display a popup otherwise, complete editing */
+void checkForAbnormalities(EditView *editView, Overview *overview) {
+    char* warningText = (char *) malloc(sizeof(char) * 512);
+    sprintf(warningText, "WARNING-WARNING-WARNING-WARNING-WARNING");
+    int abnormalityFound = 0;
+    if(editView->tempProduct.startAmount > 200 || editView->tempProduct.startAmount < 5) {
+        sprintf(warningText, "%s\nThe Start Amount is abnormal at %d", warningText, editView->tempProduct.startAmount);
+        abnormalityFound = 1;
+    }
+    if(editView->tempProduct.startPrice > 200 || editView->tempProduct.startPrice < 5) {
+        sprintf(warningText, "%s\nThe Start Price is abnormal at %d", warningText, editView->tempProduct.startPrice);
+        abnormalityFound = 1;
+    }
+    if(editView->tempProduct.expectedDelta > 30 || editView->tempProduct.expectedDelta < 5) {
+        sprintf(warningText, "%s\nThe Amount Decrement is abnormal at %d", warningText, editView->tempProduct.expectedDelta);
+        abnormalityFound = 1;
+    }
+    if(editView->tempProduct.priceDelta > 30 || editView->tempProduct.priceDelta < 5) {
+        sprintf(warningText, "%s\nThe Price Decrement is abnormal at %d", warningText, editView->tempProduct.priceDelta);
+        abnormalityFound = 1;
+    }
+    if(abnormalityFound) {
+        showPopup(editView, warningText, "Proceed anyway", "Go back", completeEditing);
+    } else {
+        completeEditing(editView, overview);
+    }
+    free(warningText);
+}
+/* Puts all the values from the temporary product into the product that is currently being edited */
+void completeEditing(EditView *editView, Overview *overview) {
+    strcpy(editView->editingProduct->name, editView->tempProduct.name);
+    editView->editingProduct->startAmount = editView->tempProduct.startAmount;
+    editView->editingProduct->startPrice = editView->tempProduct.startPrice;
+    editView->editingProduct->priceDelta = editView->tempProduct.priceDelta;
+    editView->editingProduct->expectedDelta = editView->tempProduct.expectedDelta;
+    editView->editingIndex = 0;
+    /* Sorts the product array with the new product introduced or with the new product name*/
+    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
+    saveProducts(overview->products, &overview->productAmount);
 }
