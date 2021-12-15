@@ -140,8 +140,7 @@ void drawEditView(EditView *editView, Overview *overview, Product *product) {
 void drawEditProducts(Overview *overview, EditView *editView) {
     int i, y = 0;
     if(editView->editingIndex != 0) {
-        /* could replace 69 with x or equvilant*/
-        editListItem(3, 69, editView->editingIndex, &editView->tempProduct);
+        editListItem(3, -1, editView->editingIndex, &editView->tempProduct); //-1 represents an unknown index
     }
     /* Cycles through all products */
     for(i = 0; i < overview->productAmount && y < ((38 - 7) / 3); i++) {

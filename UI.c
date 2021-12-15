@@ -60,7 +60,11 @@ void listItem(int y, int index, Product *product) {
     line('-');
     
     /*Digit*/
-    printf("%d.", index);
+    if(index != -1) {
+        printf("%d.", index);
+    } else { //If the index is -1 print questionmarks
+        printf("??.");
+    }
     
     /*Product name*/
     consolePlacement(4, y + 1);
@@ -90,7 +94,11 @@ void editListItem(int y, int index, int editing, Product *product) {
     line('-');
     
     /*Digit*/
-    printf("%d.", index);
+    if(index != -1) {
+        printf("%d.", index);
+    } else { //If the index is -1 print questionmarks. This is meant for editing the temporary product
+        printf("??.");
+    }
     
     /*Product name*/
     consolePlacement(4, y + 1);
