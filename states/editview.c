@@ -33,7 +33,11 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
         }
     } else if(input == ESCAPE) {
         editView->editingIndex = 0;
-    } else if(input == UP) {
+    } else if(input == DEL){
+        /*Removes a product and saves the new selection*/
+        removeProduct(editView->searchText, overview);
+        saveProducts(overview->products, &(overview->productAmount));
+    }else if(input == UP) {
         
     } else if(input == DOWN) {
 
