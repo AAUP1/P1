@@ -2,7 +2,7 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
-    overview->state = Searching;
+    overview->state = ChangingTime;
 
     updateTime(overview);
     loadStartTime(&(overview->startUpdatingTime));
@@ -44,9 +44,7 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
             saveStartTime(overview->startUpdatingTime);
         }
     } else if(input == LEFT) {
-        overview->state = ChangingTime;
     } else if(input == RIGHT) {
-        overview->state = Searching;
     } else if(input == DEL) {
         /*Removes a product and saves the new selection*/
         removeProduct(overview->searchText, overview);
@@ -88,15 +86,11 @@ void drawOverview(Overview *overview) {
         time->tm_mday, time->tm_mon, 1900+time->tm_year,
         time->tm_hour, time->tm_min, time->tm_sec);
     time = localtime(&overview->startUpdatingTime);
-    printf("%cStart: %02d:%02d:00     ", 
-        overview->state == ChangingTime ? '>' : ' ',
-        time->tm_hour, time->tm_min);
+    printf("Start: %02d:%02d:00     ", time->tm_hour, time->tm_min);
     time = localtime(&overview->nextUpdateTime);
     printf("Next: %02d:%02d:00    ", 
         time->tm_hour, time->tm_min);
-    printf("%cSearch: %s", 
-        overview->state == Searching ? '>' : ' ',
-        overview->searchText);
+    printf("Search: %s", overview->searchText);
     /*Draws the variable lables*/
     overviewUI();
     /*Draws a list of the first n products*/

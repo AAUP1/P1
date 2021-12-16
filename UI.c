@@ -170,7 +170,7 @@ void controls(int currentState){
         consolePlacement(i, 37);
         printf("%s", s);
     } else if(currentState == OVERVIEW){
-        char* s = "|BACKSPACE Menu| |^v Change start time| |< Time mode| |> Searching mode| |DEL Remove product| |HOME Reset|";
+        char* s = "|BACKSPACE Menu| |^v Change start time| |DEL Remove product| |HOME Reset|";
         int i = (112 - (strlen(s)-1))/2;
         consolePlacement(i, 37);
         printf("%s", s);
