@@ -3,7 +3,7 @@
 void loadProducts(Product *products, int *productAmount) {
     FILE *file = fopen("products.txt", "r");
     if(file != NULL) {
-        int i;
+        int i, c, foundLetter;
         /* Scans the productAmount */
         fscanf(file, " %d", productAmount);
         /* Scans for all the variables in all the products and saves them to a product array */
@@ -17,6 +17,14 @@ void loadProducts(Product *products, int *productAmount) {
             fgets(name, MAX_NAME_LENGTH, file);
             /* Scans the rest of the file */
             fscanf(file, " %d %d %d %d %d %d %d", &startAmount, &expectedDelta, &startPrice, &priceDelta, &currentAmount, &expectedModifier, &priceModifier);
+            /*Cuts all the trailing spaces off the name*/
+            foundLetter = 0;
+            for(c = strlen(name)-1; c >= 0 && !foundLetter; c--) {
+                if(name[c] != ' ') {
+                    foundLetter = 1;
+                    name[c+1] = '\0';
+                }
+            }
             /* Copies each letter of the temporary name into the product name */
             strcpy(products[i].name, name);
             products[i].startAmount = startAmount;
