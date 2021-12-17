@@ -52,7 +52,8 @@ void saveProducts(Product *products, int *productAmount) {
         fprintf(file, "%-32s %d %d %d %d %d %d %d \n", 
             products[i].name, 
             products[i].startAmount, products[i].expectedDelta, products[i].startPrice, 
-            products[i].priceDelta, products[i].currentAmount, products[i].expectedModifier, products[i].priceModifier);
+            products[i].priceDelta, products[i].currentAmount, products[i].expectedModifier, 
+            products[i].priceModifier);
     }
     fclose(file);
 }
