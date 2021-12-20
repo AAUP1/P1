@@ -8,8 +8,8 @@
 
 #ifndef OVERVIEW_DEFINED
 #define OVERVIEW_DEFINED
-enum OverviewState { Searching, ChangingTime };
-typedef enum OverviewState OverviewState;
+enum SortingState { Name, CurrentAmount, StartPrice, CurrentPrice, PriceDecrement, SORTING_AMOUNT };
+typedef enum SortingState SortingState;
 struct Overview {
     char searchText[MAX_TEXT_LENGTH];
     int searchTextLength;
@@ -17,7 +17,7 @@ struct Overview {
     int productAmount;
     /* The time unit is in seconds. There are functions to convert this to hours, minutes and such */
     long int currentTime, timeOffset, startUpdatingTime, lastUpdateTime, nextUpdateTime, timeBetweenUpdates;
-    OverviewState state;
+    SortingState sorting;
 };
 typedef struct Overview Overview;
 #endif
@@ -27,14 +27,17 @@ void updateOverview(Overview* overview, StateType *currentState, int input, Prod
 void drawOverview(Overview* overview);
 
 void drawProducts(Overview *overview);
-int compareProducts(const void *p_product1, const void *p_product2);
 void addProduct(Overview* overview, char* newname, int startAmount, int startPrice, int expectedDelta, int priceDelta);
 void removeProduct(char *name, Overview *overview);
 void updateProducts(Overview *overview);
 
+int compareProductsCurrentAmount(const void *p_product1,  const void *p_product2);
+int compareProducts(const void *p_product1, const void *p_product2);
+void sortProducts(Overview *overview);
+
 void resetProducts(Product *products, int productAmount);
 void iterateProductPrices(Product *products, int productAmount);
-int getCurrentProductPrice(Product *product);
+double getCurrentProductPrice(Product *product);
 int getExpectedProductAmount(Product *product);
 
 void setNextTime(Overview *overview);

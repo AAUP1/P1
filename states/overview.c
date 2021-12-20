@@ -2,7 +2,7 @@
 
 /* Overview Functions */
 void initOverview(Overview *overview) {
-    overview->state = ChangingTime;
+    overview->sorting = Name;
 
     updateTime(overview);
     loadStartTime(&(overview->startUpdatingTime));
@@ -10,7 +10,7 @@ void initOverview(Overview *overview) {
     overview->timeBetweenUpdates = 120*60;
 
     loadProducts(overview->products, &overview->productAmount);
-    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
+    sortProducts(overview);
 
     overview->searchTextLength = 0;
     overview->searchText[0] = '\0';
@@ -30,21 +30,23 @@ void updateOverview(Overview *overview, StateType* currentState, int input, Prod
         }
         
     } else if(input == UP) {
-        if(overview->state == ChangingTime) {
-            overview->startUpdatingTime += 60*60;
-            saveStartTime(overview->startUpdatingTime);
-        } else {
-            /*Adds a product and saves the new selection*/
-            addProduct(overview, "Henlo", 420, 69, 20, 10);
-            saveProducts(overview->products, &(overview->productAmount));
-        }
+        overview->startUpdatingTime += 60*60;
+        saveStartTime(overview->startUpdatingTime);
     } else if(input == DOWN) {
-        if(overview->state == ChangingTime) {
-            overview->startUpdatingTime -= 60*60;
-            saveStartTime(overview->startUpdatingTime);
-        }
+        overview->startUpdatingTime -= 60*60;
+        saveStartTime(overview->startUpdatingTime);
     } else if(input == LEFT) {
+        overview->sorting--;
+        if(overview->sorting < 0) {
+            overview->sorting = 0;
+        }
+        sortProducts(overview);
     } else if(input == RIGHT) {
+        overview->sorting++;
+        if(overview->sorting >= SORTING_AMOUNT) {
+            overview->sorting = SORTING_AMOUNT-1;
+        }
+        sortProducts(overview);
     } else if(input == DEL) {
         /*Removes a product and saves the new selection*/
         removeProduct(overview->searchText, overview);
@@ -92,7 +94,7 @@ void drawOverview(Overview *overview) {
         time->tm_hour, time->tm_min);
     printf("Search: %s", overview->searchText);
     /*Draws the variable lables*/
-    overviewUI();
+    overviewUI(overview->sorting);
     /*Draws a list of the first n products*/
     drawProducts(overview);
 
@@ -119,7 +121,7 @@ void addProduct(Overview* overview, char* newname, int startAmount, int startPri
     newProduct->priceDelta = priceDelta;
 
     overview->productAmount++;
-    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
+    sortProducts(overview);
 }
 void removeProduct(char *name, Overview *overview) {
     int found = 0;
@@ -191,8 +193,8 @@ void iterateProductPrices(Product *products, int productAmount) {
         }
     }
 }
-int getCurrentProductPrice(Product *product) {
-    return (product->startPrice * product->priceModifier) / 100;
+double getCurrentProductPrice(Product *product) {
+    return (product->startPrice * product->priceModifier) / 100.0;
 }
 int getExpectedProductAmount(Product *product) {
     int expectedAmount = product->expectedModifier-product->expectedDelta;
@@ -248,4 +250,37 @@ int compareProducts(const void *p_product1,  const void *p_product2) {
     product1 = (Product *) p_product1;
     product2 = (Product *) p_product2;
     return compareStrings(product1->name, product2->name);
+}
+int compareProductsCurrentAmount(const void *p_product1,  const void *p_product2) {
+    Product *product1, *product2;
+    product1 = (Product *) p_product1;
+    product2 = (Product *) p_product2;
+    return product2->currentAmount - product1->currentAmount;
+}
+int compareProductsStartPrice(const void *p_product1,  const void *p_product2) {
+    Product *product1, *product2;
+    product1 = (Product *) p_product1;
+    product2 = (Product *) p_product2;
+    return product2->startPrice - product1->startPrice;
+}
+int compareProductsCurrentPrice(const void *p_product1,  const void *p_product2) {
+    Product *product1, *product2;
+    product1 = (Product *) p_product1;
+    product2 = (Product *) p_product2;
+    return getCurrentProductPrice(product2) - getCurrentProductPrice(product1);
+}
+int compareProductsPriceDecrement(const void *p_product1,  const void *p_product2) {
+    Product *product1, *product2;
+    product1 = (Product *) p_product1;
+    product2 = (Product *) p_product2;
+    return product2->priceDelta - product1->priceDelta;
+}
+void sortProducts(Overview *overview) {
+    switch(overview->sorting) {
+        case Name: qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts); break;
+        case CurrentAmount: qsort(overview->products, overview->productAmount, sizeof(Product), compareProductsCurrentAmount); break;
+        case StartPrice: qsort(overview->products, overview->productAmount, sizeof(Product), compareProductsStartPrice); break;
+        case CurrentPrice: qsort(overview->products, overview->productAmount, sizeof(Product), compareProductsCurrentPrice); break;
+        case PriceDecrement: qsort(overview->products, overview->productAmount, sizeof(Product), compareProductsPriceDecrement); break;
+    }
 }

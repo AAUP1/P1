@@ -216,15 +216,15 @@ void checkForAbnormalities(EditView *editView, Overview *overview) {
         abnormalityFound = 1;
     }
     if(editView->tempProduct.startPrice > 200 || editView->tempProduct.startPrice < 5) {
-        sprintf(warningText, "%s\nThe Start Price is abnormal at %d", warningText, editView->tempProduct.startPrice);
+        sprintf(warningText, "%s\nThe Start Price is abnormal at %lf", warningText, editView->tempProduct.startPrice);
         abnormalityFound = 1;
     }
     if(editView->tempProduct.expectedDelta > 30 || editView->tempProduct.expectedDelta < 5) {
-        sprintf(warningText, "%s\nThe Amount Decrement is abnormal at %d", warningText, editView->tempProduct.expectedDelta);
+        sprintf(warningText, "%s\nThe Amount Decrement is abnormal at %lf", warningText, editView->tempProduct.expectedDelta);
         abnormalityFound = 1;
     }
     if(editView->tempProduct.priceDelta > 30 || editView->tempProduct.priceDelta < 5) {
-        sprintf(warningText, "%s\nThe Price Decrement is abnormal at %d", warningText, editView->tempProduct.priceDelta);
+        sprintf(warningText, "%s\nThe Price Decrement is abnormal at %lf", warningText, editView->tempProduct.priceDelta);
         abnormalityFound = 1;
     }
     if(abnormalityFound) {
@@ -260,7 +260,7 @@ void completeEditing(EditView *editView, Overview *overview) {
     editView->editingProduct->expectedDelta = editView->tempProduct.expectedDelta;
     editView->editingIndex = 0;
     /* Sorts the product array with the new product introduced or with the new product name*/
-    qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
+    sortProducts(overview);
     saveProducts(overview->products, &overview->productAmount);
 }
 

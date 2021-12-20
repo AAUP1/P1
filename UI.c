@@ -73,15 +73,12 @@ void listItem(int y, int index, Product *product) {
     /*Amount*/
     consolePlacement(20, y + 1);
     printf("%d [%d]", product->currentAmount, getExpectedProductAmount(product));
-    
     /*Start price*/
     consolePlacement(50, y + 1);
     printf("%.2lf", product->startPrice);
-    
     /*Live price*/
     consolePlacement(75, y + 1);
     printf("%.2lf", getCurrentProductPrice(product));
-    
     /*Decriment*/
     consolePlacement(103, y + 1);
     printf("%% %.2lf", product->priceDelta);
@@ -130,19 +127,19 @@ void drawtitle() {
     printf("    \\|_______| \\|__|\\|__| \\|_______| \\|__|\\|__| \\|_______|\n");
 }
 /*Draws the top UI in Overview*/
-void overviewUI(){
+void overviewUI(int sortingMode){
     consolePlacement(0,1);
     line('-');
     consolePlacement(2, 2);
-    printf("Product name");
+    printf("Product name %c", sortingMode == Name ? 'v' : ' ');
     consolePlacement(20, 2);
-    printf("Product amount");
+    printf("Product amount %c", sortingMode == CurrentAmount ? 'v' : ' ');
     consolePlacement(45, 2);
-    printf("Start Price");
+    printf("Start Price %c", sortingMode == StartPrice ? 'v' : ' ');
     consolePlacement(71, 2);
-    printf("Live Price");
+    printf("Live Price %c", sortingMode == CurrentPrice ? 'v' : ' ');
     consolePlacement(100, 2);
-    printf("Decrement");
+    printf("Decrement %c", sortingMode == PriceDecrement ? 'v' : ' ');
 }
 /*Draws the top UI in Editview*/
 void editviewUI() {
