@@ -23,13 +23,13 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
         } else if(editView->editingIndex == 1) {
             editView->tempProduct.name[strlen(editView->tempProduct.name)-1] = '\0';
         } else if(editView->editingIndex == 2) {
-            editView->tempProduct.startAmount /= 10;
+            removeLowestInt(&editView->tempProduct.startAmount);
         } else if(editView->editingIndex == 3) {
-            editView->tempProduct.startPrice /= 10;
+            removeLowestDouble(&editView->tempProduct.startPrice);
         } else if(editView->editingIndex == 4) {
-            editView->tempProduct.expectedDelta /= 10;
+            removeLowestDouble(&editView->tempProduct.expectedDelta);
         } else if(editView->editingIndex == 5) {
-            editView->tempProduct.priceDelta /= 10;
+            removeLowestDouble(&editView->tempProduct.priceDelta);
         }
     } else if(input == ESCAPE) {
         editView->editingIndex = 0;
@@ -74,36 +74,38 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
                 editView->tempProduct.name[strlen(editView->tempProduct.name)+1] = '\0';
             }
         } else if(editView->editingIndex == 2 && isNumber(input)){
-            int intLength = 0;
+            double intLength = 0;
             intLength = floor(log10(abs(editView->tempProduct.startAmount))) + 1;
             if (intLength < MAX_NUMBER_LENGTH){
-                editView->tempProduct.startAmount *= 10;
-                editView->tempProduct.startAmount += input-48; 
+                putLowestInt(&editView->tempProduct.startAmount, input-48);
+                if(editView->tempProduct.startAmount > 999) {
+                    editView->tempProduct.startAmount = 999;
+                }
             }
-            
-
         } else if(editView->editingIndex == 3 && isNumber(input)){
-            int intLength = 0;
+            double intLength = 0;
             intLength = floor(log10(abs(editView->tempProduct.startPrice))) + 1;
             if (intLength < MAX_NUMBER_LENGTH){
-                editView->tempProduct.startPrice *= 10;
-                editView->tempProduct.startPrice += input-48;
+                removeDecimalsBelow(&editView->tempProduct.startPrice, 2);
+                putLowestDouble(&editView->tempProduct.startPrice, input-48, 2);
+                if(editView->tempProduct.startPrice > 999) {
+                    editView->tempProduct.startPrice = 999;
+                }
             }
-            
         } else if(editView->editingIndex == 4 && isNumber(input)){
-            int intLength = 0;
+            double intLength = 0;
             intLength = floor(log10(abs(editView->tempProduct.expectedDelta))) + 1;
             if (intLength < MAX_NUMBER_LENGTH - 7){ // this is done to ensure that the user cant decriment with more than 2 digits.
-                editView->tempProduct.expectedDelta *= 10;
-                editView->tempProduct.expectedDelta += input-48;
+                removeDecimalsBelow(&editView->tempProduct.expectedDelta, 2);
+                putLowestDouble(&editView->tempProduct.expectedDelta, input-48, 2);
             }
             
         } else if(editView->editingIndex == 5 && isNumber(input)){
-            int intLength = 0;
+            double intLength = 0;
             intLength = floor(log10(abs(editView->tempProduct.priceDelta))) + 1;
             if (intLength < MAX_NUMBER_LENGTH - 7){ // this is done to ensure that the user cant decriment with more than 2 digits.
-                editView->tempProduct.priceDelta *= 10;
-                editView->tempProduct.priceDelta += input-48;
+                removeDecimalsBelow(&editView->tempProduct.priceDelta, 2);
+                putLowestDouble(&editView->tempProduct.priceDelta, input-48, 2);
             }
             
         } else if(editView->editingIndex < 1 && editView->searchTextLength < 20) {
@@ -147,7 +149,6 @@ Product *findProduct(char *name, Product *products, int productAmount) {
     int i;
     for(i = 0; i < productAmount; i++) {
         /* If searchText is equal to a substring of the name of the product, return it */
-        
         if(lowercaseStrstr(products[i].name, name)) {
             return &products[i];
         }
@@ -227,11 +228,28 @@ void checkForAbnormalities(EditView *editView, Overview *overview) {
         abnormalityFound = 1;
     }
     if(abnormalityFound) {
-        showPopup(editView, warningText, "Proceed anyway", "Go back", completeEditing);
+        showPopup(editView, warningText, "Proceed anyway", "Go back", checkForRepeatName);
     } else {
-        completeEditing(editView, overview);
+        checkForRepeatName(editView, overview);
     }
     free(warningText);
+}
+void checkForRepeatName(EditView *editView, Overview *overview) {
+    int i, hasResetName = 0;
+    for(i = 0; i < overview->productAmount; i++) {
+        /* If there is a product that has the same name as the one being edited */
+        if(lowercaseStrcmp(overview->products[i].name, editView->tempProduct.name) == 0) {
+            if(editView->editingProduct != &overview->products[i]) {
+                strcpy(editView->tempProduct.name, editView->editingProduct->name);
+                showPopup(editView, "The name you were trying to change the product to is already in the system. The name has not been changed.", 
+                    "Okay", "Okay", completeEditing);
+                    hasResetName = 1;
+            }
+        }
+    }
+    if(!hasResetName) {
+        completeEditing(editView, overview);
+    }
 }
 /* Puts all the values from the temporary product into the product that is currently being edited */
 void completeEditing(EditView *editView, Overview *overview) {
@@ -244,4 +262,25 @@ void completeEditing(EditView *editView, Overview *overview) {
     /* Sorts the product array with the new product introduced or with the new product name*/
     qsort(overview->products, overview->productAmount, sizeof(Product), compareProducts);
     saveProducts(overview->products, &overview->productAmount);
+}
+
+void removeDecimalsBelow(double *number, int decimalIndex) {
+    *number *= pow(10, decimalIndex);
+    *number = floor(*number);
+    *number /= pow(10, decimalIndex);
+}
+void removeLowestDouble(double *number) {
+    *number /= 10;
+}
+void putLowestDouble(double *number, int toPut, int lowestDecimal) {
+    *number *= 10;
+    *number += toPut/pow(10, lowestDecimal);   
+}
+
+void removeLowestInt(int *number) {
+    *number /= 10;
+}
+void putLowestInt(int *number, int toPut) {
+    *number *= 10;
+    *number += toPut;  
 }

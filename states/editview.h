@@ -31,4 +31,12 @@ void hidePopup(EditView *editView, Overview *overview);
 
 void initiateEditing(EditView *editView, Overview *overview);
 void checkForAbnormalities(EditView *editView, Overview *overview);
+void checkForRepeatName(EditView *editView, Overview *overview);
 void completeEditing(EditView *editView, Overview *overview);
+
+void removeDecimalsBelow(double *number, int decimalIndex);
+void removeLowestDouble(double *number);
+void putLowestDouble(double *number, int toPut, int lowestDecimal);
+
+void removeLowestInt(int *number);
+void putLowestInt(int *number, int toPut);

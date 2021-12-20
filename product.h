@@ -8,16 +8,16 @@ struct Product {
 
     /*Constant values*/
         int startAmount;
-        int expectedDelta;
-        int startPrice;
-        int priceDelta;
+        double expectedDelta;
+        double startPrice;
+        double priceDelta;
 
     /*Dynamic values*/
         int currentAmount;
 
     /* What percentage of the starting value is the current value */
-        int expectedModifier;
-        int priceModifier;
+        double expectedModifier;
+        double priceModifier;
 };
 typedef struct Product Product;
 #endif

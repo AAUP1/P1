@@ -27,8 +27,6 @@ int main(void) {
         if(kbhit()) {
             /* Reads a character */
             characterPressed = readCharacter();
-            //printf("\n Key pressed = %c, with index of %i", character_pressed, character_pressed);
-
             /* Sends signal to the right state */
             updateState(currentState, characterPressed);
             redrawState(currentState);

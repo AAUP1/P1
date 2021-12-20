@@ -76,15 +76,15 @@ void listItem(int y, int index, Product *product) {
     
     /*Start price*/
     consolePlacement(50, y + 1);
-    printf("%d", product->startPrice);
+    printf("%.2lf", product->startPrice);
     
     /*Live price*/
     consolePlacement(75, y + 1);
-    printf("%d", getCurrentProductPrice(product));
+    printf("%.2lf", getCurrentProductPrice(product));
     
     /*Decriment*/
     consolePlacement(103, y + 1);
-    printf("%% %d", product->priceDelta);
+    printf("%% %.2lf", product->priceDelta);
     printf("\n");
     line('-');
 }
@@ -107,18 +107,15 @@ void editListItem(int y, int index, int editing, Product *product) {
     /*Start Amount*/
     consolePlacement(20, y + 1);
     printf("%c%d", editing == 2 ? '>' : ' ', product->startAmount);
-    
     /*Start price*/
     consolePlacement(50, y + 1);
-    printf("%c%d", editing == 3 ? '>' : ' ', product->startPrice);
-    
+    printf("%c%.2lf", editing == 3 ? '>' : ' ', product->startPrice);
     /*Amount Decrement*/
     consolePlacement(75, y + 1);
-    printf("%c%% %d", editing == 4 ? '>' : ' ', product->expectedDelta);
-
+    printf("%c%% %.2lf", editing == 4 ? '>' : ' ', product->expectedDelta);
     /*Price Decrement*/
     consolePlacement(103, y + 1);
-    printf("%c%% %d", editing == 5 ? '>' : ' ', product->priceDelta);
+    printf("%c%% %.2lf", editing == 5 ? '>' : ' ', product->priceDelta);
     printf("\n");
     line('-');
 }
