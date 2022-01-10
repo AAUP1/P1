@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <conio.h>
-#include <wchar.h> // wchar needed for wprint too show different symbols.
+#include <wchar.h> // wchar needed for wprint to show different symbols.
 #include <unistd.h> //used for clearing the screen
 #include <windows.h> //used for placing cursor in console
 #include <time.h>

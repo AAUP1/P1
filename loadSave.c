@@ -59,6 +59,7 @@ void saveProducts(Product *products, int *productAmount) {
     fclose(file);
 }
 
+/* Saves and loads the first decrement time from a separate file */
 void saveStartTime(long int startUpdatingTime) {
     FILE *file;
     file = fopen("startTime.txt", "w");

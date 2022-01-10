@@ -7,8 +7,6 @@ void initMenu(Menu* menu) {
     menu->box_amount = 3;
 }
 void updateMenu(Menu* menu, StateType *currentState, int *programRunning, int input) {
-    int i;
-    
     /* If the user inputs space, make a selection */
     if(input == ENTER) {
         /* If the active box is the exit box, stop the program */

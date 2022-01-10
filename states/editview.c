@@ -37,7 +37,7 @@ void updateEditView(EditView *editView, Overview *overview, StateType *currentSt
         /*Removes a product and saves the new selection*/
         removeProduct(editView->searchText, overview);
         saveProducts(overview->products, &(overview->productAmount));
-    }else if(input == UP) {
+    } else if(input == UP) {
         
     } else if(input == DOWN) {
 
@@ -242,7 +242,7 @@ void checkForRepeatName(EditView *editView, Overview *overview) {
             if(editView->editingProduct != &overview->products[i]) {
                 strcpy(editView->tempProduct.name, editView->editingProduct->name);
                 showPopup(editView, "The name you were trying to change the product to is already in the system. The name has not been changed.", 
-                    "Okay", "Okay", completeEditing);
+                    "Okay", "", completeEditing);
                     hasResetName = 1;
             }
         }

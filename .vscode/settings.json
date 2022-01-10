@@ -11,6 +11,7 @@
         "lib.h": "c",
         "conio.h": "c",
         "string.h": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "wchar.h": "c"
     }
 }
